@@ -588,12 +588,43 @@ void rw_sprite_set_image(int id, const void* data);
 void rw_sprite_set_anim(int id, uint8_t frame_count, uint8_t delay);
 
 /* 2D */
+void rw_2d_init(void);
+void rw_2d_shutdown(void);
+
+/* State */
+void rw_2d_set_fill_color(uint8_t color);
+void rw_2d_set_stroke_color(uint8_t color);
+void rw_2d_set_stroke_width(uint8_t width);
+void rw_2d_set_fill_enabled(bool enabled);
+void rw_2d_set_anti_alias(bool enabled);
+void rw_2d_set_clip(int16_t x, int16_t y, int16_t w, int16_t h);
+void rw_2d_reset_clip(void);
+
+/* Primitive */
 void rw_2d_draw_point(int16_t x, int16_t y, uint8_t color);
 void rw_2d_draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t color);
 void rw_2d_draw_rect(int16_t x, int16_t y, uint16_t w, uint16_t h, uint8_t color);
 void rw_2d_fill_rect(int16_t x, int16_t y, uint16_t w, uint16_t h, uint8_t color);
 void rw_2d_draw_circle(int16_t cx, int16_t cy, uint16_t r, uint8_t color);
 void rw_2d_fill_circle(int16_t cx, int16_t cy, uint16_t r, uint8_t color);
+void rw_2d_draw_ellipse(int16_t cx, int16_t cy, uint16_t rx, uint16_t ry, uint8_t color);
+void rw_2d_draw_polygon(const int16_t* vertices, uint16_t count, uint8_t color);
+void rw_2d_fill_polygon(const int16_t* vertices, uint16_t count, uint8_t color);
+void rw_2d_draw_triangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, uint8_t color);
+void rw_2d_fill_triangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, uint8_t color);
+void rw_2d_draw_arc(int16_t cx, int16_t cy, uint16_t radius, float start_angle, float end_angle, uint8_t color);
+void rw_2d_draw_pieslice(int16_t cx, int16_t cy, uint16_t radius, float start_angle, float end_angle, uint8_t color);
+
+/* Shortcuts (usa state corrente) */
+void rw_2d_rect(int16_t x, int16_t y, uint16_t w, uint16_t h);
+void rw_2d_circle(int16_t cx, int16_t cy, uint16_t r);
+void rw_2d_ellipse(int16_t cx, int16_t cy, uint16_t rx, uint16_t ry);
+
+/* Getter */
+uint8_t rw_2d_get_fill_color(void);
+uint8_t rw_2d_get_stroke_color(void);
+uint8_t rw_2d_get_stroke_width(void);
+rw_2d_layer_t* rw_2d_get_layer(void);
 
 /* 3D */
 void rw_3d_set_camera(float x, float y, float z);
@@ -601,7 +632,56 @@ void rw_3d_set_fov(float fov);
 void rw_3d_draw_mesh(const float* vertices, uint32_t vcount, 
                      const uint16_t* indices, uint32_t icount);
 
-/* Utility */
+/* Math utilities */
+void rw_math_init(void);
+
+/* Trigonometria (gradi, 0.01° precisione) */
+float rw_sin(float degrees);
+float rw_cos(float degrees);
+float rw_tan(float degrees);
+float rw_asin(float x);
+float rw_acos(float x);
+float rw_atan2(float y, float x);
+
+/* Utilità angoli */
+float rw_normalize_angle(float degrees);
+float rw_deg_to_rad(float degrees);
+float rw_rad_to_deg(float radians);
+
+/* Utilità 3D */
+void rw_rotate_x(float x, float y, float z, float angle, float* rx, float* ry, float* rz);
+void rw_rotate_y(float x, float y, float z, float angle, float* rx, float* ry, float* rz);
+void rw_rotate_z(float x, float y, float z, float angle, float* rx, float* ry, float* rz);
+float rw_project_3d_to_2d(float x, float y, float z,
+                          float cam_x, float cam_y, float cam_z,
+                          float fov, int screen_w, int screen_h,
+                          int* out_x, int* out_y);
+
+/* Matrici */
+void rw_matrix_multiply(const float* a, const float* b, float* result);
+void rw_matrix_identity(float* m);
+void rw_matrix_translation(float* m, float x, float y, float z);
+void rw_matrix_scale(float* m, float x, float y, float z);
+void rw_matrix_rotation_x(float* m, float angle);
+void rw_matrix_rotation_y(float* m, float angle);
+void rw_matrix_rotation_z(float* m, float angle);
+void rw_matrix_perspective(float* m, float fov, float aspect, float near, float far);
+
+/* Vettori */
+float rw_vector_length_3d(float x, float y, float z);
+void rw_vector_normalize_3d(float* x, float* y, float* z);
+float rw_vector_dot_3d(float x1, float y1, float z1, float x2, float y2, float z2);
+void rw_vector_cross_3d(float x1, float y1, float z1, float x2, float y2, float z2,
+                        float* rx, float* ry, float* rz);
+
+/* Utilità generali */
+float rw_lerp(float a, float b, float t);
+float rw_clamp(float value, float min_val, float max_val);
+float rw_map(float value, float in_min, float in_max, float out_min, float out_max);
+float rw_distance_2d(float x1, float y1, float x2, float y2);
+float rw_distance_3d(float x1, float y1, float z1, float x2, float y2, float z2);
+
+/* Color utility */
 uint32_t rw_color_to_rgb(uint8_t color);
 void     rw_color_set_custom(uint8_t index, uint32_t rgb);
 
