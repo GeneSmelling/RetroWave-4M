@@ -20,13 +20,10 @@ int rw_pipeline_init(void)
 {
     if (pipeline_initialized) return 0;
     
-    if (!rw_gc.initialized) rw_graphics_init(RW_RES_FULLHD);
-    
-    rw_background_init();
-    rw_3d_init();
-    rw_sprites_init();
-    rw_2d_init();
-    rw_text_layer_init();
+    /* Init graphics if not done */
+    if (!rw_gc.initialized) {
+        rw_graphics_init(RW_RES_SCREEN_2);
+    }
     
     last_frame_time = 0;
     pipeline_initialized = true;
@@ -38,12 +35,6 @@ int rw_pipeline_init(void)
 void rw_pipeline_shutdown(void)
 {
     if (!pipeline_initialized) return;
-    
-    rw_text_layer_shutdown();
-    rw_2d_shutdown();
-    rw_sprites_shutdown();
-    rw_3d_shutdown();
-    rw_background_shutdown();
     
     pipeline_initialized = false;
 }
@@ -87,11 +78,12 @@ void rw_pipeline_clear(void)
 
 void rw_pipeline_fill(uint8_t color)
 {
-    const uint8_t* p = rw_color_palette[color & 0x0F];
+    /* Simple fill with color index as grayscale */
+    uint8_t v = (color & 0x0F) * 17;  /* 0-255 grayscale */
     uint8_t* buf = rw_gc.dbuffer.buffers[rw_gc.dbuffer.back_buffer].pixels;
     int32_t total = rw_gc.width * rw_gc.height;
     for (int32_t i = 0; i < total; i++) {
-        buf[i*4] = p[2]; buf[i*4+1] = p[1]; buf[i*4+2] = p[0]; buf[i*4+3] = 255;
+        buf[i*4] = v; buf[i*4+1] = v; buf[i*4+2] = v; buf[i*4+3] = 255;
     }
 }
 
@@ -102,8 +94,6 @@ void rw_pipeline_update(uint32_t current_time)
     
     if (last_frame_time == 0) { last_frame_time = current_time; frame_delta_ms = 0; }
     else { frame_delta_ms = current_time - last_frame_time; last_frame_time = current_time; }
-    
-    rw_sprites_update(current_time);
 }
 
 /* Render */
@@ -113,10 +103,7 @@ void rw_pipeline_render(void)
     
     rw_pipeline_clear();
     
-    if (layer_visible[0]) rw_background_render();
-    if (layer_visible[1]) rw_3d_render();
-    if (layer_visible[2]) rw_sprites_render();
-    if (layer_visible[4]) rw_text_layer_render();
+    /* Text uses immediate mode rendering */
 }
 
 /* Frame timing */
