@@ -712,4 +712,64 @@ const char* rw_gpio_get_name(uint8_t pin);
 void rw_gpio_status(uint8_t pin, char* buffer, size_t size);
 void rw_gpio_dump(void);
 
+/* System - Monitor, TTS */
+void rw_system_init(void);
+
+/* Monitor - tipi */
+typedef struct {
+    bool connected;
+    uint16_t width;
+    uint16_t height;
+    uint32_t refresh_rate;
+    char edid_name[64];
+} rw_monitor_info_t;
+
+/* Monitor - funzioni */
+void rw_monitor_detect(void);
+bool rw_monitor_is_connected(void);
+uint16_t rw_monitor_get_width(void);
+uint16_t rw_monitor_get_height(void);
+void rw_monitor_get_info(rw_monitor_info_t* info);
+
+/* TTS - tipi */
+typedef enum {
+    RW_TTS_VOICE_FEMALE = 0,
+    RW_TTS_VOICE_MALE,
+    RW_TTS_VOICE_COUNT
+} rw_tts_voice_t;
+
+typedef enum {
+    RW_TTS_LANG_IT = 0,
+    RW_TTS_LANG_EN,
+    RW_TTS_LANG_DE,
+    RW_TTS_LANG_FR,
+    RW_TTS_LANG_ES,
+    RW_TTS_LANG_JA,
+    RW_TTS_LANG_ZH,
+    RW_TTS_LANG_COUNT
+} rw_tts_lang_t;
+
+/* TTS - funzioni */
+void rw_tts_init(void);
+void rw_tts_shutdown(void);
+void rw_tts_say(const char* text);
+void rw_tts_speak_now(const char* text, rw_tts_lang_t lang);
+void rw_tts_process_queue(void);
+void rw_tts_clear_queue(void);
+void rw_tts_stop(void);
+void rw_tts_set_voice(rw_tts_voice_t voice);
+void rw_tts_set_language(rw_tts_lang_t lang);
+void rw_tts_set_volume(uint8_t volume);
+void rw_tts_set_rate(uint8_t rate);
+void rw_tts_set_queue(bool enabled);
+void rw_tts_read_line(const char* line);
+void rw_tts_read_cursor_pos(int16_t x, int16_t y);
+void rw_tts_read_header(const char* header);
+
+/* Accessibilità */
+void rw_system_check_accessibility(void);
+
+/* Versione */
+void rw_get_version(uint8_t* major, uint8_t* minor, uint8_t* patch);
+
 #endif /* RETROWAVE_GRAPHICS_H */
