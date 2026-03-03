@@ -784,6 +784,42 @@ typedef enum {
     RW_GPIO_MODE_SPI
 } rw_gpio_mode_t;
 
+/* ============================================================================
+ * GRAPHICS PIPELINE (Layer Management)
+ * ============================================================================ */
+
+/* Pipeline functions (different from low-level layer API) */
+int rw_pipeline_init(void);
+void rw_pipeline_shutdown(void);
+
+/* Pipeline layer control */
+void rw_pipeline_layer_set_visible(int layer, bool visible);
+bool rw_pipeline_layer_get_visible(int layer);
+void rw_pipeline_layer_set_opacity(int layer, uint8_t opacity);
+uint8_t rw_pipeline_layer_get_opacity(int layer);
+
+/* Double buffer */
+void rw_pipeline_flip(void);
+void rw_pipeline_clear(void);
+void rw_pipeline_fill(uint8_t color);
+
+/* Render loop */
+void rw_pipeline_update(uint32_t current_time);
+void rw_pipeline_render(void);
+
+/* Frame timing */
+uint32_t rw_pipeline_get_delta_ms(void);
+uint32_t rw_pipeline_get_last_frame_time(void);
+
+/* Video mode */
+void rw_pipeline_set_resolution(rw_resolution_t res);
+rw_resolution_t rw_pipeline_get_resolution(void);
+void rw_pipeline_set_vsync(bool enabled);
+bool rw_pipeline_get_vsync(void);
+
+/* Screenshot */
+void rw_pipeline_screenshot(const char* filename);
+
 /* GPIO */
 void rw_gpio_init(void);
 void rw_gpio_shutdown(void);
