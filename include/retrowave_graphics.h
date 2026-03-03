@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 
 /* ============================================================================
  * VERSIONE E CONFIGURAZIONE
@@ -684,5 +685,31 @@ float rw_distance_3d(float x1, float y1, float z1, float x2, float y2, float z2)
 /* Color utility */
 uint32_t rw_color_to_rgb(uint8_t color);
 void     rw_color_set_custom(uint8_t index, uint32_t rgb);
+
+/* GPIO - Modalità pin (deve precedere le funzioni) */
+typedef enum {
+    RW_GPIO_MODE_INPUT = 0,
+    RW_GPIO_MODE_OUTPUT,
+    RW_GPIO_MODE_PWM,
+    RW_GPIO_MODE_I2C,
+    RW_GPIO_MODE_SPI
+} rw_gpio_mode_t;
+
+/* GPIO */
+void rw_gpio_init(void);
+void rw_gpio_shutdown(void);
+int rw_gpio_mode(uint8_t pin, rw_gpio_mode_t mode);
+int rw_gpio_pull(uint8_t pin, int8_t pull);
+void rw_gpio_write(uint8_t pin, uint8_t value);
+uint8_t rw_gpio_read(uint8_t pin);
+void rw_gpio_toggle(uint8_t pin);
+void rw_gpio_pwm(uint8_t pin, uint8_t duty_percent);
+void rw_gpio_pwm_frequency(uint8_t pin, uint32_t hz);
+uint8_t rw_gpio_read_debounced(uint8_t pin, uint8_t samples);
+void rw_gpio_write_byte(uint8_t start_pin, uint8_t value);
+uint8_t rw_gpio_read_byte(uint8_t start_pin);
+const char* rw_gpio_get_name(uint8_t pin);
+void rw_gpio_status(uint8_t pin, char* buffer, size_t size);
+void rw_gpio_dump(void);
 
 #endif /* RETROWAVE_GRAPHICS_H */

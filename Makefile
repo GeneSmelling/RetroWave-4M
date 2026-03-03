@@ -6,7 +6,7 @@ CFLAGS += -Iinclude
 LDFLAGS = -lm -lrt
 
 # Sorgenti
-SOURCES = src/retrowave_graphics.c src/rw_text.c src/rw_background.c src/rw_2d.c src/rw_math.c
+SOURCES = src/retrowave_graphics.c src/rw_text.c src/rw_background.c src/rw_2d.c src/rw_math.c src/rw_gpio.c
 OBJECTS = $(SOURCES:.c=.o)
 
 # Header
