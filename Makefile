@@ -1,12 +1,11 @@
 # RetroWave-4M Graphics Library Makefile
 
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -std=c11 -g
-CFLAGS += -Iinclude
+CFLAGS = -Wall -Wextra -O2 -std=c11 -g -Iinclude -Wno-sign-compare
 LDFLAGS = -lm -lrt
 
 # Sorgenti
-SOURCES = src/retrowave_graphics.c src/rw_text.c src/rw_background.c src/rw_2d.c src/rw_math.c src/rw_gpio.c src/rw_system.c
+SOURCES = src/retrowave_graphics.c src/rw_text.c src/rw_background.c src/rw_2d.c src/rw_math.c src/rw_gpio.c src/rw_system.c src/rw_3d.c src/rw_sprites.c
 OBJECTS = $(SOURCES:.c=.o)
 
 # Header

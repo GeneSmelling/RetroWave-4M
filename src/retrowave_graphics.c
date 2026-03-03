@@ -204,6 +204,8 @@ int rw_graphics_init(rw_resolution_t resolution)
     /* Inizializza contesto */
     memset(&rw_gc, 0, sizeof(rw_gc));
     rw_gc.resolution = resolution;
+    rw_gc.width = (uint16_t)w;
+    rw_gc.height = (uint16_t)h;
     rw_gc.vsync = true;
     
     /* Alloca double buffer */
@@ -452,37 +454,7 @@ void rw_clear_all_layers(void)
  * SPRITES
  * ============================================================================ */
 
-int rw_sprite_create(uint16_t width, uint16_t height)
-{
-    (void)width;
-    (void)height;
-    return -1;
-}
-
-void rw_sprite_destroy(int id)
-{
-    (void)id;
-}
-
-void rw_sprite_set_position(int id, uint16_t x, uint16_t y)
-{
-    (void)id;
-    (void)x;
-    (void)y;
-}
-
-void rw_sprite_set_image(int id, const void* data)
-{
-    (void)id;
-    (void)data;
-}
-
-void rw_sprite_set_anim(int id, uint8_t frame_count, uint8_t delay)
-{
-    (void)id;
-    (void)frame_count;
-    (void)delay;
-}
+/* Sprites are now implemented in rw_sprites.c - see retrowave_graphics.h */
 
 /* ============================================================================
  * 2D PRIMITIVES

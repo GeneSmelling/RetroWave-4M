@@ -507,6 +507,8 @@ typedef struct {
 typedef struct {
     /* Risoluzione */
     rw_resolution_t         resolution;
+    uint16_t               width;
+    uint16_t               height;
     
     /* Double buffer */
     rw_double_buffer_t      dbuffer;
@@ -581,13 +583,6 @@ void rw_background_set_tilemap(const uint16_t* map, uint32_t cols, uint32_t rows
 void rw_background_set_parallax(bool enabled, float factor_x, float factor_y);
 void rw_background_update_parallax(int32_t camera_delta_x, int32_t camera_delta_y);
 
-/* Sprites */
-int  rw_sprite_create(uint16_t width, uint16_t height);
-void rw_sprite_destroy(int id);
-void rw_sprite_set_position(int id, uint16_t x, uint16_t y);
-void rw_sprite_set_image(int id, const void* data);
-void rw_sprite_set_anim(int id, uint8_t frame_count, uint8_t delay);
-
 /* 2D */
 void rw_2d_init(void);
 void rw_2d_shutdown(void);
@@ -628,10 +623,104 @@ uint8_t rw_2d_get_stroke_width(void);
 rw_2d_layer_t* rw_2d_get_layer(void);
 
 /* 3D */
+/*Nota: tutte le strutture sono opache, usa void* */
+
+typedef enum {
+    RW_3D_MODE_WIREFRAME = 0,
+    RW_3D_MODE_FLAT,
+    RW_3D_MODE_WIREFLAT
+} rw_3d_mode_t;
+
+void rw_3d_init(void);
+void rw_3d_shutdown(void);
+
+/* Camera */
 void rw_3d_set_camera(float x, float y, float z);
+void rw_3d_set_lookat(float x, float y, float z);
 void rw_3d_set_fov(float fov);
-void rw_3d_draw_mesh(const float* vertices, uint32_t vcount, 
-                     const uint16_t* indices, uint32_t icount);
+
+/* Rendering mode */
+void rw_3d_set_mode(rw_3d_mode_t mode);
+rw_3d_mode_t rw_3d_get_mode(void);
+
+/* Mesh */
+int rw_3d_create_mesh(const char* name);
+int rw_3d_set_vertices(int mesh_id, const float* vertices, uint32_t count);
+int rw_3d_set_faces(int mesh_id, const uint16_t* indices, uint32_t count);
+void rw_3d_set_position(int mesh_id, float x, float y, float z);
+void rw_3d_set_rotation(int mesh_id, float rx, float ry, float rz);
+void rw_3d_set_scale(int mesh_id, float sx, float sy, float sz);
+void rw_3d_set_wire_color(int mesh_id, uint8_t color);
+void rw_3d_set_wire_thickness(int mesh_id, uint8_t thickness);
+void rw_3d_set_face_color(int mesh_id, uint8_t color);
+void rw_3d_set_parent(int mesh_id, int parent_id);
+void rw_3d_set_pivot(int mesh_id, float x, float y, float z);
+
+/* GRID */
+int rw_3d_create_grid(uint16_t cols, uint16_t rows, float size_x, float size_y);
+void rw_3d_grid_set_height(int grid_id, uint16_t col, uint16_t row, float height);
+void rw_3d_grid_set_face_color(int grid_id, uint16_t col, uint16_t row, uint8_t color);
+void rw_3d_grid_set_wire(int grid_id, uint8_t color, uint8_t thickness);
+
+/* Rendering */
+void rw_3d_render(void);
+
+/* Camera access */
+void* rw_3d_get_camera(void);
+
+/* Collision */
+bool rw_3d_check_collision(int mesh_a, int mesh_b);
+
+/* Info */
+uint32_t rw_3d_get_mesh_count(void);
+void* rw_3d_get_mesh(int id);
+
+/* Sprite - Opaque type (see line 391 for full definition) */
+void rw_sprites_init(void);
+void rw_sprites_shutdown(void);
+
+/* Creation */
+int rw_sprite_create(const char* name);
+int rw_sprite_add_frame(int sprite_id, uint16_t width, uint16_t height, const uint8_t* pixels);
+int rw_sprite_load_frame(int sprite_id, const char* filename);
+
+/* Animation */
+int rw_sprite_create_anim(int sprite_id, const char* name, uint16_t frame_delay, bool loop);
+int rw_sprite_anim_add_frame(int sprite_id, int anim_id, uint8_t frame_index);
+void rw_sprite_play(int sprite_id, int anim_id);
+void rw_sprite_stop(int sprite_id);
+void rw_sprite_pause(int sprite_id);
+void rw_sprite_resume(int sprite_id);
+
+/* Transform */
+void rw_sprite_set_position(int sprite_id, int32_t x, int32_t y);
+void rw_sprite_set_origin(int sprite_id, int16_t x, int16_t y);
+void rw_sprite_set_scale(int sprite_id, float sx, float sy);
+void rw_sprite_set_rotation(int sprite_id, float radians);
+void rw_sprite_set_alpha(int sprite_id, uint8_t alpha);
+void rw_sprite_set_visible(int sprite_id, bool visible);
+void rw_sprite_set_flip(int sprite_id, bool flip_x, bool flip_y);
+
+/* Physics */
+void rw_sprite_set_velocity(int sprite_id, float vx, float vy);
+void rw_sprite_set_gravity(int sprite_id, float gravity);
+void rw_sprite_apply_physics(int sprite_id, uint32_t delta_ms);
+
+/* Collision */
+void rw_sprite_enable_collision(int sprite_id, bool enabled);
+void rw_sprite_set_collision_mask(int sprite_id, uint8_t mask);
+bool rw_sprite_check_collision(int sprite_a, int sprite_b);
+void rw_sprite_resolve_collision(int sprite_id, int other_id);
+
+/* Rendering */
+void rw_sprites_render(void);
+void rw_sprites_update(uint32_t current_time);
+
+/* Info */
+uint32_t rw_sprite_count(void);
+void* rw_sprite_get(int id);
+int rw_sprite_get_frame_count(int sprite_id);
+int rw_sprite_get_anim_count(int sprite_id);
 
 /* Math utilities */
 void rw_math_init(void);
