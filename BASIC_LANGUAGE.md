@@ -106,6 +106,12 @@ DrawBorder:
 - **POLYGON** `[(x1,y1), (x2,y2), ...] [, ANGLE=degrees]`: Draws an arbitrary polygon from a list of 2D vertices (minimum 3). Optional `ANGLE` rotates the polygon around its centroid (default 0).
 - **REGULAR_POLYGON** `x, y, sides, radius [, ANGLE=degrees]`: Draws a regular polygon (e.g. triangle, hexagon) centred at `(x, y)` with the given number of sides (integer ≥ 3) and radius. Optional `ANGLE` rotates around the centre (default 0).
 - **SPHERE, BOX, TORUS, WORMHOLE**: 3D shapes rendering commands.
+- **HEIGHTFIELD** `heights, faceColors, x, y, z, dx, dy, lineColor, lineThickness`: Renders a heightfield surface (terrain) defined over the X–Y plane with elevation along Z.
+  - `heights`: `X × Y` matrix of height samples (`X >= 2`, `Y >= 2`); `heights[x][y]` is the height at grid coordinate `(x, y)`.
+  - `faceColors`: `(X-1) × (Y-1)` matrix of RGBA colors, one per quad cell; `faceColors[x][y]` colors the quad bounded by samples `(x, y)`, `(x+1, y)`, `(x, y+1)`, `(x+1, y+1)`.
+  - `(x, y, z)`: world-space origin for sample `(0, 0)`.
+  - `dx`, `dy`: spacing between adjacent samples in world units along X and Y.
+  - `lineColor`, `lineThickness`: grid edge style used in Wireframe and FlatWire modes; ignored in Flat mode. All grid edges are drawn between adjacent samples in both X and Y directions.
 
 ### REGULAR_POLYGON Example
 ```

@@ -82,7 +82,30 @@ Coloring per rendering mode (applies to all Platonic solid commands):
 - **FlatWire**: both edge RGBA color and per-face color array apply
 
 ## Heightfield Rendering
-- Supports rendering terrains based on heightmaps to create varied landscapes.
+
+A heightfield is a surface defined by a 2D grid of height samples laid over the **X–Y plane**, with elevation applied along the **Z axis**.
+
+### Height Data
+
+- Heights are provided as an `X × Y` matrix `H` (`X >= 2`, `Y >= 2`), where `H[x][y]` is the height (Z elevation) at grid coordinate `(x, y)`.
+- Grid coordinates run from `(0, 0)` to `(X-1, Y-1)`.
+
+### Face Colors
+
+- Face colors are defined by a `(X-1) × (Y-1)` matrix `FC`, where `FC[x][y]` is the RGBA color of the quad cell bounded by samples `(x, y)`, `(x+1, y)`, `(x, y+1)`, and `(x+1, y+1)`.
+
+### Rendering Modes
+
+| Mode | Description |
+|---|---|
+| **Wireframe** | Draws all grid edges (every segment between adjacent samples in both X and Y directions) using a single RGBA `lineColor` and integer `lineThickness` (logical pixels, >= 1). No filled faces. |
+| **Flat** | Draws filled quad faces using the `(X-1) × (Y-1)` face-color matrix `FC`. No edges drawn. |
+| **FlatWire** | Draws filled quad faces using the face-color matrix `FC` and also draws all grid edges using the specified `lineColor` and `lineThickness`. |
+
+### Geometry Notes
+
+- Adjacent samples form quad cells; the renderer may internally triangulate each quad (e.g. split along a diagonal) for rasterization.
+- World placement (origin/translation) and grid spacing (distance between adjacent samples in world units) are specified by the command or API call that renders the heightfield.
 
 ## 2D Sprites
 - Animated sprites for characters and objects, implemented for both movement and interactions.
