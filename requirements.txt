@@ -1,0 +1,27 @@
+# Python Dependencies
+
+# Graphics
+pygame
+matplotlib
+
+# Audio
+pydub
+playsound
+
+# Text-to-Speech
+pyttsx3
+
+# UI
+Tkinter
+PyQt5
+
+# GPIO Control
+RPi.GPIO
+
+# Testing
+pytest
+unittest
+
+# Utilities
+requests
+numpy
