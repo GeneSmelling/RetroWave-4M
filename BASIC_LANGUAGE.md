@@ -8,7 +8,7 @@
 
 ## Arrays
 - **Single-Dimensional**: An array with a single index.
-- **Multi-Dimensional**: Arrays with multiple indices. Can be declared like `DIM arr(10, 10)`.
+- **Multi-Dimensional**: Arrays with multiple indices. Can be declared like `DIM arr(10, 10)`. 
 - **Dynamic REDIM**: Allows resizing of arrays at runtime using `REDIM` keyword.
 
 ## Record Structures
@@ -58,16 +58,35 @@
 
 ## Graphics Commands
 - **GRAPHIC**: Initiates graphics mode.
-- **LINE**: Draws a line between two points.
-- **CIRCLE**: Draws a circle.
-- **RECTANGLE**: Draws a rectangle.
+- **LINE** `x1, y1, x2, y2 [, ANGLE=degrees]`: Draws a line between two points. Optional `ANGLE` rotates around its midpoint (default 0).
+- **CIRCLE** `x, y, radius [, ANGLE=degrees]`: Draws a circle. Optional `ANGLE` parameter accepted for consistency (default 0).
+- **RECTANGLE** `x, y, width, height [, ANGLE=degrees]`: Draws a rectangle. Optional `ANGLE` rotates around its centre (default 0).
+- **POLYGON** `[(x1,y1), (x2,y2), ...] [, ANGLE=degrees]`: Draws an arbitrary polygon from a list of 2D vertices (minimum 3). Optional `ANGLE` rotates the polygon around its centroid (default 0).
+- **REGULAR_POLYGON** `x, y, sides, radius [, ANGLE=degrees]`: Draws a regular polygon (e.g. triangle, hexagon) centred at `(x, y)` with the given number of sides (integer ≥ 3) and radius. Optional `ANGLE` rotates around the centre (default 0).
 - **SPHERE, BOX, TORUS, WORMHOLE**: 3D shapes rendering commands.
+
+### REGULAR_POLYGON Example
+```
+' Draw a regular hexagon centred at (320, 240), radius 50, rotated 30 degrees
+REGULAR_POLYGON 320, 240, 6, 50, ANGLE=30
+```
 
 ## 3D Primitives
 - Use to define basic 3D shapes and objects in the environment.
 
 ## Camera Setup
 - Setup view with **FOV** (Field of View) settings.
+
+## Sprite Commands
+- **SPRITE_ANGLE** `sprite, angle`: Sets the rotation angle (in degrees) of a sprite. Rotation is applied around the sprite's anchor point.
+- **SPRITE_ANCHOR** `sprite, x_offset, y_offset`: Sets the pivot/anchor point for sprite rotation as a relative offset (0.0–1.0). Default is `(0.5, 0.5)` (centre of the sprite).
+
+### Sprite Rotation Example
+```
+' Rotate a sprite 45 degrees around its centre
+SPRITE_ANCHOR player_sprite, 0.5, 0.5
+SPRITE_ANGLE player_sprite, 45
+```
 
 ## Sound Commands
 - **SOUND**: Initiates sound.
