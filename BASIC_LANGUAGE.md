@@ -63,7 +63,42 @@
 - **RECTANGLE** `x, y, width, height [, ANGLE=degrees]`: Draws a rectangle. Optional `ANGLE` rotates around its centre (default 0).
 - **POLYGON** `[(x1,y1), (x2,y2), ...] [, ANGLE=degrees]`: Draws an arbitrary polygon from a list of 2D vertices (minimum 3). Optional `ANGLE` rotates the polygon around its centroid (default 0).
 - **REGULAR_POLYGON** `x, y, sides, radius [, ANGLE=degrees]`: Draws a regular polygon (e.g. triangle, hexagon) centred at `(x, y)` with the given number of sides (integer ≥ 3) and radius. Optional `ANGLE` rotates around the centre (default 0).
-- **SPHERE, BOX, TORUS, WORMHOLE**: 3D shapes rendering commands.
+- **SPHERE** `x, y, z, radius`: Renders a sphere centred at `(x, y, z)`.
+- **BOX** `x, y, z, width, height, depth`: Renders a cuboid centred at `(x, y, z)`.
+- **TORUS** `x, y, z, majorRadius, minorRadius, majorSegments, minorSegments`: Renders a torus.
+- **WORMHOLE** `crossSection, spline, subdivisions`: Renders a WORMHOLE-TUNNEL shape.
+- **POLYHEDRON** `vertices, faces`: Renders an arbitrary polyhedron. `vertices` is an array of `(x, y, z)` records; `faces` is an array of face index lists.
+- **TETRAHEDRON** `x, y, z, radius [, rotX=0, rotY=0, rotZ=0]`: Renders a regular tetrahedron (4 triangular faces).
+- **OCTAHEDRON** `x, y, z, radius [, rotX=0, rotY=0, rotZ=0]`: Renders a regular octahedron (8 triangular faces).
+- **DODECAHEDRON** `x, y, z, radius [, rotX=0, rotY=0, rotZ=0]`: Renders a regular dodecahedron (12 pentagonal faces).
+- **ICOSAHEDRON** `x, y, z, radius [, rotX=0, rotY=0, rotZ=0]`: Renders a regular icosahedron (20 triangular faces).
+
+### POLYHEDRON Example
+```
+' Define a simple tetrahedron manually using POLYHEDRON
+TYPE Vertex3D
+    x AS FLOAT
+    y AS FLOAT
+    z AS FLOAT
+END TYPE
+
+DIM verts(4) AS Vertex3D
+verts(0) = {x:  1,  y:  1,  z:  1}
+verts(1) = {x: -1,  y: -1,  z:  1}
+verts(2) = {x: -1,  y:  1,  z: -1}
+verts(3) = {x:  1,  y: -1,  z: -1}
+
+DIM faces(4, 3) AS INTEGER
+faces(0) = {0, 1, 2}
+faces(1) = {0, 1, 3}
+faces(2) = {0, 2, 3}
+faces(3) = {1, 2, 3}
+
+POLYHEDRON verts, faces
+
+' Or use the built-in shorthand:
+ICOSAHEDRON 0, 0, 0, 100
+```
 
 ### REGULAR_POLYGON Example
 ```

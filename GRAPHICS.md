@@ -52,6 +52,38 @@ Coloring per rendering mode:
 - **FlatWire**: edge RGBA color and face color matrix
 - **Flat**: face color matrix of size `(number of polygon vertices) x (subdivisions - 1)` RGBA values — rows = polygon vertices, columns = subdivisions - 1
 
+### POLYHEDRON
+An arbitrary convex or non-convex polyhedron defined by:
+- **Vertices**: an array of 3D points, each a record with fields `x`, `y`, `z` (floating-point). Minimum 4 vertices.
+- **Faces**: an array of faces, where each face is a list of vertex indices (integers, 0-based) referencing the vertices array. Each face must have a minimum of 3 indices. Faces must be planar.
+- Supports all three rendering modes: **Wireframe**, **Flat**, **FlatWire**
+
+Coloring per rendering mode:
+- **Wireframe**: single RGBA edge color
+- **Flat**: one RGBA color per face (array of N RGBA values, where N = number of faces)
+- **FlatWire**: both edge RGBA color and per-face color array apply
+
+### Regular Polyhedra (Platonic Solids)
+The five Platonic solids are supported as built-in primitives. Each is defined by:
+- Centre point `(x, y, z)`
+- Radius — the circumradius (distance from centre to vertex)
+- Optional orientation — three rotation angles in degrees: `rotX`, `rotY`, `rotZ` (all default 0)
+
+The supported Platonic solids are:
+
+| Solid | Faces | Face shape | Command |
+|---|---|---|---|
+| Tetrahedron | 4 | Equilateral triangle | `TETRAHEDRON` |
+| Cube (Hexahedron) | 6 | Square | `BOX` (already exists) |
+| Octahedron | 8 | Equilateral triangle | `OCTAHEDRON` |
+| Dodecahedron | 12 | Regular pentagon | `DODECAHEDRON` |
+| Icosahedron | 20 | Equilateral triangle | `ICOSAHEDRON` |
+
+Coloring per rendering mode (applies to all Platonic solid commands):
+- **Wireframe**: single RGBA edge color
+- **Flat**: one RGBA color per face (array of N RGBA values matching the face count of the solid)
+- **FlatWire**: both edge RGBA color and per-face color array apply
+
 ## Heightfield Rendering
 - Supports rendering terrains based on heightmaps to create varied landscapes.
 
