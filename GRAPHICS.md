@@ -38,19 +38,19 @@ A torus (donut shape) defined by:
 
 Coloring per rendering mode:
 - **Wireframe**: single RGBA edge color
-- **Flat**: face color matrix of `majorSegments × minorSegments` RGBA values
+- **Flat**: face color matrix of `majorSegments x minorSegments` RGBA values
 - **FlatWire**: both edge RGBA color and face color matrix apply
 
 ### WORMHOLE-TUNNEL
 A tunnel/pipe shape defined by:
 - **Cross-section polygon**: arbitrary polygon (minimum 3 vertices) given as a list of 2D points `[(x1,y1), (x2,y2), ...]` defining the tunnel's cross-section shape
-- **Path spline**: a spline (Catmull-Rom or Bézier) defining the 3D centreline path the tunnel follows
+- **Path spline**: a spline (Catmull-Rom or Bezier) defining the 3D centreline path the tunnel follows
 - **Subdivisions**: integer number of sections dividing the tunnel along the spline (minimum 1); higher values produce smoother curves
 
 Coloring per rendering mode:
 - **Wireframe**: single RGBA edge color
 - **FlatWire**: edge RGBA color and face color matrix
-- **Flat**: face color matrix of size `(number of polygon vertices) × (subdivisions − 1)` RGBA values — rows = polygon vertices, columns = subdivisions − 1
+- **Flat**: face color matrix of size `(number of polygon vertices) x (subdivisions - 1)` RGBA values — rows = polygon vertices, columns = subdivisions - 1
 
 ## Heightfield Rendering
 - Supports rendering terrains based on heightmaps to create varied landscapes.
