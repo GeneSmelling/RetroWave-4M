@@ -34,6 +34,42 @@ Presets are named and browsable. Users may save modified presets as custom entri
 - **Compatibility**: Supports SF2 soundfonts.
 - **Integration**: Allows users to load and create custom instruments.
 - **Features**: Includes basic editing tools for modifying soundfonts.
+- **Delivery model**: One SF2 file per instrument, registered in `soundfonts/index.json` (aligned with §8 Lazy Loading). Custom user soundfonts can be dropped into the `soundfonts/user/` directory and are auto-discovered at startup.
+
+### Bundled Instrument Library
+
+#### Ethnic / Acoustic Instruments
+A curated selection of ~12 widely recognised acoustic and ethnic instruments, covering a broad range of world music traditions:
+
+| Instrument | Origin / Tradition | Notes |
+|---|---|---|
+| Kora | West Africa | 21-string bridge harp-lute |
+| Sitar | North India | Long-neck plucked lute; includes sympathetic strings |
+| Tabla | North India | Paired hand drums; multiple stroke articulations |
+| Oud | Middle East / North Africa | Fretless short-neck lute |
+| Erhu | China | Two-string bowed spike fiddle |
+| Koto | Japan | 13-string zither |
+| Shakuhachi | Japan | End-blown bamboo flute |
+| Charango | Andes (Bolivia/Peru) | Small 10-string lute; bright, metallic tone |
+| Tin Whistle | Celtic / Ireland | Six-hole flageolet; bright, piercing tone |
+| Balafon | West Africa | Wooden keyed percussion with gourd resonators |
+| Duduk | Armenia / Caucasus | Double-reed woodwind; rich, mournful timbre |
+| Didgeridoo | Australia (Aboriginal) | Circular-breathing aerophone; deep drones |
+
+#### Synth-Based Instruments
+A set of synthesis-driven timbres delivered as SF2 soundfonts. These are inherently harder to source as authentic recordings and are instead modelled or synthesized:
+
+| Instrument | Description |
+|---|---|
+| Synthpad | Slow-attack, sustain-heavy pad; lush chordal background texture |
+| Supersaw | Detuned stack of sawtooth oscillators; classic trance/eurobeat lead |
+| Hoover | Aggressive, rising-pitch synth stab inspired by Rave Hoover |
+| Pulse Bass | Square/pulse-wave bass with filter sweep; punchy electronic bass |
+| Glass Bell | FM-derived glassy bell tone; crystalline, high-register sound |
+| Choir Aah (Synth) | Vocoder/formant-based synthetic choir |
+| Analog Strings | Detuned string ensemble emulation reminiscent of Roland Strings |
+
+> **Note:** Synth-based SF2 soundfonts are modelled rather than sampled; tonal accuracy depends on the SF2 engine's synthesis capabilities.
 
 ## 5. Audio Tracks
 - **Track Count**: Supports unlimited audio tracks.
