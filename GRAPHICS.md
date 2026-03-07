@@ -57,9 +57,22 @@ Coloring per rendering mode:
 
 ## 2D Sprites
 - Animated sprites for characters and objects, implemented for both movement and interactions.
+- Sprites support **rotation** by a specified angle in degrees.
+- Rotation is applied around a configurable **pivot/anchor point** (default: centre of the sprite).
+- The anchor point is expressed as a relative offset from the sprite's top-left corner, e.g. `(0.5, 0.5)` for centre, `(0.0, 0.0)` for top-left.
 
 ## 2D Graphics Primitives
-- Supports shapes like rectangles, circles, and polygons for UI elements.
+Supported 2D primitives:
+- **Rectangle** – Axis-aligned or rotated rectangle defined by position, width, and height.
+- **Circle** – Defined by centre point and radius.
+- **Polygon** – Arbitrary polygon defined by a list of 2D vertices `[(x1,y1), (x2,y2), ...]` (minimum 3 vertices).
+- **Regular Polygon** – A perfectly regular polygon (e.g. equilateral triangle, square, pentagon, hexagon) defined by:
+  - Centre point `(x, y)`
+  - Number of sides (integer, minimum 3)
+  - Radius (distance from centre to vertex)
+  - Optional rotation angle in degrees (default: 0)
+
+All 2D primitives support an optional **rotation angle** (in degrees, default 0), applied around the primitive's centre point.
 
 ## Text Layer
 - Dynamic text rendering for displaying scores, messages, and other information in the game.
