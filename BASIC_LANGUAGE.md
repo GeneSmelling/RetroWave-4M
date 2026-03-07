@@ -37,6 +37,48 @@
 - **WHILE/WEND**: Executes while a condition is true.
 - **DO/LOOP**: Executes indefinitely until a condition is met.
 
+## GOTO and GOSUB
+
+### Labels
+A label marks a target line for `GOTO` and `GOSUB`. Labels are identifiers followed by a colon, placed at the start of a line:
+```
+MyLabel:
+    PRINT "arrived here"
+```
+
+### GOTO
+Unconditionally transfers execution to the specified label.
+
+**Syntax:** `GOTO label`
+
+```
+GOTO SkipSection
+PRINT "this line is skipped"
+SkipSection:
+PRINT "execution continues here"
+```
+
+### GOSUB / RETURN
+`GOSUB` calls a subroutine at the specified label, saving the return address on the call stack. `RETURN` transfers execution back to the statement immediately after the calling `GOSUB`.
+
+**Syntax:**
+- `GOSUB label`
+- `RETURN`
+
+```
+GOSUB DrawBorder
+PRINT "border drawn"
+END
+
+DrawBorder:
+    RECTANGLE 0, 0, 320, 240
+    RETURN
+```
+
+- Subroutines defined with `GOSUB`/`RETURN` do not accept parameters; use `FUNCTION` or `SUB` for parameterised routines.
+- `GOSUB` calls may be nested; each `RETURN` unwinds one level of the call stack.
+- Jumping into a `GOSUB` subroutine body with `GOTO` (bypassing the `GOSUB`) is permitted but the call stack will not contain a return address; a subsequent `RETURN` will cause a runtime error.
+
 ## Functions and Subroutines
 - Define operations using `FUNCTION` and `SUB`. Supports parameters and return types.
 - Example:
@@ -47,9 +89,9 @@
   ```
 
 ## Built-in Functions
-- **String Functions**: `LEN()`, `MID()`, `LEFT()`, `RIGHT()`.
-- **Math Functions**: `SIN()`, `COS()`, `TAN()`, `RND()`, `ABS()`.
-- **Type Functions**: `TYPEOF()`, `CAST()`.
+- **String Functions**: `LEN()`, `MID()`, `LEFT()`, `RIGHT()`. 
+- **Math Functions**: `SIN()`, `COS()`, `TAN()`, `RND()`, `ABS()`. 
+- **Type Functions**: `TYPEOF()`, `CAST()`. 
 
 ## Input/Output
 - **PRINT**: Displays output to screen.
