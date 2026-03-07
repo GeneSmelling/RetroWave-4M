@@ -18,6 +18,18 @@ This document outlines the comprehensive sound system specification for the Retr
 - **Specifications**: Adjustable parameters for oscillators, filters, and envelopes.
 - **Presets**: Ships with a variety of presets for easy use.
 
+  ### Synthwave Preset Bank
+  A dedicated **Synthwave preset bank** is included, inspired by the sonic palette of 1980s synthesizers (Roland Juno, Oberheim, DX7-style FM pads, etc.). Preset categories:
+  - **Lead Synth** — bright, cutting melodic leads.
+  - **Pad** — lush, evolving background textures.
+  - **Arpeggio Bass** — rhythmic, pulsing bass arpeggios.
+  - **Pluck** — short attack, decaying melodic tones.
+  - **Choir/Vox** — synthetic vocal and choir timbres.
+  - **Drums/808** — punchy drum machines and 808-style bass drums.
+  - **Atmospheres** — ambient, spacious soundscapes.
+
+  Presets are named and browsable within the preset library. Users may save modified presets as custom entries.
+
 ## 4. Soundfont Instruments
 - **Compatibility**: Supports SF2 soundfonts.
 - **Integration**: Allows users to load and create custom instruments.
@@ -40,3 +52,11 @@ This document outlines the comprehensive sound system specification for the Retr
 
 ## Conclusion
 This sound system will provide robust capabilities to enhance the auditory experience in the RetroWave-4M project. Each section can be expanded with further technical details as development progresses.
+
+## Lazy Loading Strategy
+Audio assets (samples, soundfonts, presets) are loaded on demand when first played, rather than at application startup.
+
+- A short **prebuffer** period is allowed before playback begins to avoid audible glitches during initial load.
+- Loaded assets are **cached**; the cache can be flushed manually or automatically under memory pressure.
+- Frequently-used assets (e.g. UI sounds, common SFX) can be marked for **eager loading** at startup via a manifest file.
+- Synthwave presets are loaded lazily per-preset; only the **preset metadata index** is loaded at startup.

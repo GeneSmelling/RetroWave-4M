@@ -3,8 +3,8 @@
 ## Vision Statement
 The RetroWave-4M project aims to blend retro aesthetics with modern technology, creating an immersive and engaging experience that transports users to a nostalgic world while embracing contemporary functionality.
 
-## Uchronia/Neoism Concept
-Uchronia, often described as an alternate timeline, allows us to explore possibilities that diverge from historical events. Neoism presents a philosophy that embraces the potential of recreating past ideals under modern interpretations. RetroWave-4M seeks to reflect these concepts by integrating elements from the past into a cohesive futuristic narrative.
+## Alternate Timeline / Neoism Concept
+The concept of alternate timelines allows us to explore possibilities that diverge from historical events — reimagining the past under modern interpretations. Neoism presents a philosophy that embraces the potential of recreating past ideals through a contemporary lens. RetroWave-4M seeks to reflect these concepts by integrating elements from the past into a cohesive futuristic narrative.
 
 ## Retrowave Aesthetic
 The Retrowave aesthetic is characterized by its vibrant colors, synthwave music, and nostalgic representations of the 1980s and 1990s. It emphasizes digital art, retro graphics, and a sense of optimism about the future, while harkening back to the technological witnessing of a different era. RetroWave-4M embodies this aesthetic by utilizing visual styles, soundscapes, and themes that transport users to a digitally reimagined past.

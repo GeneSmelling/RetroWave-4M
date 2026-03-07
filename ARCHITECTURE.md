@@ -1,8 +1,11 @@
 # Detailed Graphics Architecture
 
 ## Resolutions
-- Standard resolution: 1920x1080 (Full HD)
-- Support for lower resolutions: 1280x720 (HD)
+- `1920×1080` — Full HD, native physical resolution
+- `960×540` — Logical mode; each logical pixel = 2×2 physical pixels
+- `640×360` — Logical mode; each logical pixel = 3×3 physical pixels
+
+All three resolutions are part of a deliberate integer pixel-scaling system anchored to the 1920×1080 physical canvas.
 
 ## Color Model
 - Used color model: RGBA (Red, Green, Blue, Alpha)
