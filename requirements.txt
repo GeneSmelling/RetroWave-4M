@@ -12,15 +12,15 @@ playsound
 pyttsx3
 
 # UI
-Tkinter
+# tkinter is part of the Python standard library — no pip install needed
 PyQt5
 
-# GPIO Control
-RPi.GPIO
+# GPIO Control (Raspberry Pi only)
+# RPi.GPIO  # Uncomment if running on Raspberry Pi hardware
 
 # Testing
 pytest
-unittest
+# unittest is part of the Python standard library — no pip install needed
 
 # Utilities
 requests
