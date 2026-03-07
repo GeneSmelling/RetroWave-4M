@@ -1,13 +1,15 @@
 # Graphics System Specification
 
 ## Resolutions
-- _640x480_  – Standard resolution for retro gameplay.
-- _800x600_  – Enhanced resolution providing clearer visuals.
-- _1024x768_  – High-resolution mode for more detailed graphics.
+- `1920x1080` – Full HD, native physical resolution
+- `960x540` – Logical mode: each logical pixel maps to a 2×2 block of physical pixels
+- `640x360` – Logical mode: each logical pixel maps to a 3×3 block of physical pixels
+
+All lower resolutions use integer pixel-scaling: logical pixels are scaled up to exact whole-number multiples of the physical pixel grid, ensuring sharp, artefact-free rendering consistent with the retro aesthetic.
 
 ## Color Model
-- **RGB** (Red, Green, Blue) model used for defining colors, ensuring vibrant visuals.
-- **16-bit Color Depth** – Allows for a broad spectrum of colors while remaining resource-efficient.
+- **RGBA** (Red, Green, Blue, Alpha) model used for defining colors, ensuring vibrant visuals with full transparency support.
+- **32-bit color (8 bits per channel)** – 8 bits each for R, G, B, and A, providing over 16 million colors with a full alpha channel.
 
 ## 3D Rendering Modes
 1. **Wireframe**  – Basic rendering mode for visualizing 3D structures through wireframes, useful for debugging.
@@ -18,8 +20,37 @@
 - **Static Camera**   – Fixed position for classic retro gameplay.
 - **Dynamic Camera**  – Follows the player, providing a more immersive experience.
 
+### Field of View (FOV)
+- Defines the camera's horizontal angle of view in degrees.
+- **Default: 90 degrees** if not explicitly specified.
+- Applies to both Static and Dynamic camera types.
+- Can be set per camera or per scene.
+
 ## 3D Primitives
 - **Cuboids**, **Spheres**, **Cylinders** – Basic geometric shapes for building worlds and objects.
+
+### TORUS
+A torus (donut shape) defined by:
+- `majorRadius` – distance from the centre of the tube to the centre of the torus
+- `minorRadius` – radius of the tube itself
+- `majorSegments` – number of segments around the main ring (integer, minimum 3); controls approximation quality
+- `minorSegments` – number of segments around the tube cross-section (integer, minimum 3); controls approximation quality
+
+Coloring per rendering mode:
+- **Wireframe**: single RGBA edge color
+- **Flat**: face color matrix of `majorSegments × minorSegments` RGBA values
+- **FlatWire**: both edge RGBA color and face color matrix apply
+
+### WORMHOLE-TUNNEL
+A tunnel/pipe shape defined by:
+- **Cross-section polygon**: arbitrary polygon (minimum 3 vertices) given as a list of 2D points `[(x1,y1), (x2,y2), ...]` defining the tunnel's cross-section shape
+- **Path spline**: a spline (Catmull-Rom or Bézier) defining the 3D centreline path the tunnel follows
+- **Subdivisions**: integer number of sections dividing the tunnel along the spline (minimum 1); higher values produce smoother curves
+
+Coloring per rendering mode:
+- **Wireframe**: single RGBA edge color
+- **FlatWire**: edge RGBA color and face color matrix
+- **Flat**: face color matrix of size `(number of polygon vertices) × (subdivisions − 1)` RGBA values — rows = polygon vertices, columns = subdivisions − 1
 
 ## Heightfield Rendering
 - Supports rendering terrains based on heightmaps to create varied landscapes.
@@ -38,3 +69,17 @@
 
 ## Retrowave Aesthetic Integration
 - Includes neon color palettes, synthwave motifs, and retro futurism design elements to achieve an immersive retro vibe.
+
+## Widget System
+- Widgets are interactive UI elements rendered on top of the 5-layer graphics stack.
+- Available in both **graphics windows** and **text-mode windows**.
+- Widget types include: buttons, labels, text input fields, checkboxes, sliders, dropdown menus, scrollable panels.
+- Widgets support keyboard navigation (per accessibility goals).
+- Widget visibility and enabled/disabled state are manageable at runtime.
+
+## Lazy Loading
+- Graphics assets (sprites, textures, heightmaps, 3D meshes) are loaded on demand when first accessed, not at startup.
+- A placeholder (blank sprite or colour fill) is shown while the asset loads asynchronously.
+- Loaded assets are cached in memory and not reloaded unless explicitly flushed.
+- Assets may be preloaded explicitly using a `PRELOAD` command for performance-critical scenes.
+- Memory pressure triggers eviction of least-recently-used cached assets.
