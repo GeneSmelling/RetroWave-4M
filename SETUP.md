@@ -1,8 +1,9 @@
 # Development Setup and Installation Instructions
 
 ## Prerequisites
-- Ensure you have [Node.js](https://nodejs.org/) installed.
-- Ensure you have [npm](https://www.npmjs.com/) installed.
+- Python 3.10 or higher
+- `pip` (included with Python)
+- Recommended: virtual environment (`venv`)
 
 ## Installation Steps
 1. Clone the repository:
@@ -11,22 +12,24 @@
    cd RetroWave-4M
    ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment:
    ```bash
-   npm install
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   > **Note:** `RPi.GPIO` in `requirements.txt` is only needed on Raspberry Pi hardware. It is commented out by default.
 
 ## Running the Project
-- To start the project, run:
-   ```bash
-   npm start
-   ```
+```bash
+python main.py
+```
 
 ## Running Tests
-- To run the tests, execute:
-   ```bash
-   npm test
-   ```
-
-## Additional Info
-- For further configuration options, check the documentation in the `docs/` folder.
+```bash
+pytest
+```
