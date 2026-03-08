@@ -30,6 +30,81 @@ Inspired by the sonic palette of 1980s synthesizers (Roland Juno, Oberheim, DX7-
 
 Presets are named and browsable. Users may save modified presets as custom entries.
 
+## 3A. Synth Preset Library (Bundled)
+
+Preset identifiers are stable, machine-readable strings used by code and UI components. UI display names may be localized for different languages, but identifiers always remain constant. Presets are grouped by category to make browsing easier for users and developers.
+
+### Preset Identifier Groups
+
+#### LEAD_SYNTH
+- `NEON_VIPER_LEAD`
+- `LASER_FIFTH_LEAD`
+- `CHROME_PULSE_LEAD`
+- `ARCADE_SOLO_LEAD`
+- `NIGHT_RIDER_PORTA`
+
+#### PAD
+- `VHS_GLOW_PAD`
+- `MIDNIGHT_HORIZON_PAD`
+- `LUSH_ANALOG_PAD`
+- `GLASS_DAWN_PAD`
+- `SLOW_DRIFT_PAD`
+
+#### ARPEGGIO_BASS
+- `GRID_RUNNER_ARP_BASS`
+- `STEP_SEQ_MONO_BASS`
+- `METRO_PULSE_ARP`
+- `NEON_CHASE_BASS`
+- `CLOCKWORK_ARP_BASS`
+
+#### PLUCK
+- `PIXEL_PLUCK`
+- `CRYSTAL_PICK_PLUCK`
+- `SHORT_GATE_PLUCK`
+- `FM_KEY_PLUCK`
+- `BUBBLY_PLUCK`
+
+#### CHOIR_VOX
+- `VOX_AAH_STACK`
+- `FORMANT_CHOIR_PAD`
+- `VAPOR_VOX`
+- `TALKBOX_LEAD`
+- `NEON_CHOIR_HIT`
+
+#### DRUMS_808
+- `EIGHT_O_EIGHT_PUNCH_KIT`
+- `LINN_NIGHT_KIT`
+- `ELECTRO_TOMS`
+- `GATED_SNARE_80S`
+- `TAPE_HATS`
+
+#### ATMOSPHERES
+- `CITY_RAIN_ATMOS`
+- `SPACE_DUST_DRONE`
+- `DARK_ALLEY_AIR`
+- `DISTANT_SIGNAL_BED`
+- `SUNRISE_NOISE_WASH`
+
+### Cross-Genre Synth Features
+
+The following identifiers represent **synthesis features/styles** rather than genre-specific preset banks. They may be applied across any bank or genre and are not limited to synthwave contexts.
+
+#### SUPERSAW (supersaw oscillator stack / detune chorus style)
+Multiple detuned sawtooth oscillators layered to produce a wide, rich sound common in trance, eurobeat, synthwave, and pop production:
+- `SUPERSAW_ANTHEM`
+- `SUPERSAW_CHORD_STACK`
+- `SUPERSAW_WIDE_LEAD`
+- `SUPERSAW_SLOW_BLOOM`
+- `SUPERSAW_DETUNE_RUSH`
+
+#### OVERDRIVE (drive/distortion stage)
+A clipping or waveshaping stage applied to the signal path, adding harmonic saturation and grit. Usable across bass, lead, pad, and arp sounds in any genre:
+- `OVERDRIVE_BASS_GROWL`
+- `OVERDRIVE_LEAD_SCREAM`
+- `OVERDRIVE_PULSE_STAB`
+- `OVERDRIVE_ARP_GRIND`
+- `OVERDRIVE_PAD_RASP`
+
 ## 4. Soundfont Instruments
 - **Compatibility**: Supports SF2 soundfonts.
 - **Integration**: Allows users to load and create custom instruments.
