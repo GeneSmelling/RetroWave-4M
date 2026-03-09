@@ -144,22 +144,9 @@ SPRITE_ANGLE player_sprite, 45
 - **TUNING**: Set the instrument tuning.
 - **TRACK** operations manage musical compositions.
 
-## Example Program
-``` BASIC
-DIM people(10) AS Person
-
-FOR i = 1 TO 10
-    people(i).Name = INPUT("Enter name:")
-    people(i).Age = INPUT("Enter age:")
-NEXT i
-
-FOR i = 1 TO 10
-    PRINT "Name: " + people(i).Name + ", Age: " + people(i).Age
-NEXT i
-```
 ### Text-to-Speech (TTS)
 
-The system provides offline Text-to-Speech suitable for a real “home computer” workflow (including headless use on Raspberry Pi 400).
+The system provides offline Text-to-Speech suitable for a real "home computer" workflow (including headless use on Raspberry Pi 400).
 
 TTS is designed with:
 - **Primary engine:** Piper (higher-quality voices).
@@ -182,11 +169,11 @@ Speaks the given text.
 
 - `text$`: The text to speak (UTF-8).
 - `lang$` (optional): BCP-47 language tag or short language code.
-  - Examples: `"it-IT"`, `"en-US"`, `"zh-CN"`, `"it"`, `"en"`.
+  - Examples: "it-IT", "en-US", "zh-CN", "it", "en".
   - If omitted, the current default voice/language is used.
 - `mode$` (optional): Controls pronunciation strategy.
-  - `"TEXT"` (default): Natural reading for human text.
-  - `"CODE"`: Intended for reading BASIC listings and technical strings (symbols and tokens are read more explicitly; may use a different internal reading strategy and/or engine).
+  - "TEXT" (default): Natural reading for human text.
+  - "CODE": Intended for reading BASIC listings and technical strings (symbols and tokens are read more explicitly; may use a different internal reading strategy and/or engine).
 
 **Behavior**
 - If a Piper voice matching `lang$` is available, it is used.
@@ -244,20 +231,17 @@ Returns the number of queued utterances **excluding** the one currently playing.
 ```
 
 > Note: TTS runs offline. Language availability depends on installed voice packs.
-## Sound Commands
 
-### Text-to-Speech (TTS)
+## Example Program
+``` BASIC
+DIM people(10) AS Person
 
-TTS text$ [, lang$ [, mode$]];
-Normative queue semantics: FIFO, no overlap, no implicit suppression.
+FOR i = 1 TO 10
+    people(i).Name = INPUT("Enter name:")
+    people(i).Age = INPUT("Enter age:")
+NEXT i
 
-Control commands:
-- SAYSTOP
-- SAYFLUSH
-- SAYSTATUS()
-- SAYQUEUE()
-
-Examples:
-10. SAY ‘Hello, World!’;
-20. TTS ‘Good Morning’, ‘en’;  
-30. TTS ‘This is a test of the TTS system.’;
+FOR i = 1 TO 10
+    PRINT "Name: " + people(i).Name + ", Age: " + people(i).Age
+NEXT i
+```
