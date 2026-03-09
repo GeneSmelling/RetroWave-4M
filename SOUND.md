@@ -8,6 +8,30 @@ This document outlines the comprehensive sound system specification for the Retr
 - **Languages Supported**: English, Spanish, French, and more.
 - **Custom Voices**: Ability to create and integrate custom voices.
 
+### Offline implementation notes (normative)
+
+Target: Raspberry Pi 400 (offline-first home computer).
+
+#### Engines
+- **Piper (primary):** preferred when a matching Piper voice/model is installed (higher-quality voices).
+- **eSpeak NG (fallback):** used when Piper is not available for the requested language (broad coverage).
+
+#### Utterance queue semantics
+- Each `TTS` call MUST create one *utterance* and enqueue it in a **FIFO queue**.
+- The system MUST synthesize/play **only one utterance at a time** (**no overlap**).
+- New utterances MUST NOT implicitly interrupt the currently playing utterance (**no implicit suppression**).
+
+#### Control commands
+- `SAYSTOP` MUST stop playback immediately and clear the pending utterance queue.
+- `SAYFLUSH` MUST NOT interrupt the currently playing utterance; it clears the pending queue so that no further speech occurs after the current utterance completes.
+- `SAYSTATUS()` returns: `0` idle, `1` speaking, `2` paused (only if pause/resume exists).
+- `SAYQUEUE()` returns the number of queued utterances **excluding** the one currently playing.
+
+#### Lazy loading and memory (recommended)
+- Piper voices SHOULD be loaded lazily (not at boot).
+- Cached Piper voices SHOULD use an LRU policy with a configurable memory budget (e.g. `TTS_CACHE_MB`).
+- Under memory pressure (budget exceeded), least-recently-used voices SHOULD be unloaded.
+
 ## 2. Sampled Sound
 - **Library**: Includes a wide range of pre-recorded sounds.
 - **Formats Supported**: WAV, MP3, OGG.
