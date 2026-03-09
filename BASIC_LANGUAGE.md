@@ -157,3 +157,90 @@ FOR i = 1 TO 10
     PRINT "Name: " + people(i).Name + ", Age: " + people(i).Age
 NEXT i
 ```
+### Text-to-Speech (TTS)
+
+The system provides offline Text-to-Speech suitable for a real “home computer” workflow (including headless use on Raspberry Pi 400).
+
+TTS is designed with:
+- **Primary engine:** Piper (higher-quality voices).
+- **Fallback engine:** eSpeak NG (broad language coverage).
+- **No cloud requirement.**
+
+#### Queue semantics (normative)
+
+TTS output is **queued**.
+
+- Every call to `TTS` creates one *utterance* and pushes it to a **FIFO queue**.
+- The system MUST play **only one utterance at a time** (**no overlap**).
+- If `TTS` is called while speech is already playing, the new utterance MUST be **queued**, and MUST NOT implicitly interrupt the current utterance (**no implicit suppression**).
+
+Use `SAYSTOP` / `SAYFLUSH` to explicitly control playback and the queue.
+
+#### TTS `text$ [, lang$ [, mode$]]`
+
+Speaks the given text.
+
+- `text$`: The text to speak (UTF-8).
+- `lang$` (optional): BCP-47 language tag or short language code.
+  - Examples: `"it-IT"`, `"en-US"`, `"zh-CN"`, `"it"`, `"en"`.
+  - If omitted, the current default voice/language is used.
+- `mode$` (optional): Controls pronunciation strategy.
+  - `"TEXT"` (default): Natural reading for human text.
+  - `"CODE"`: Intended for reading BASIC listings and technical strings (symbols and tokens are read more explicitly; may use a different internal reading strategy and/or engine).
+
+**Behavior**
+- If a Piper voice matching `lang$` is available, it is used.
+- If not, the system falls back to eSpeak NG for that language.
+- If the requested language is not available, a final fallback voice is used (implementation-defined; typically the default language).
+
+#### Speech control commands
+
+##### SAYSTOP
+Stops speech immediately and clears the queue.
+
+- Stops the current utterance **immediately**
+- Clears any queued utterances
+
+##### SAYFLUSH
+Flushes pending speech without interrupting the current utterance.
+
+- Does **not** interrupt the current utterance
+- Clears any queued utterances (so nothing will be spoken after the current finishes)
+
+##### SAYSTATUS `()` -> status
+Returns the current speech status:
+- `0` = idle (not speaking, queue empty)
+- `1` = speaking
+- `2` = paused (only if pause/resume is implemented)
+
+##### SAYQUEUE `()` -> n
+Returns the number of queued utterances **excluding** the one currently playing.
+
+#### Examples (always line-numbered)
+
+**Queueing (FIFO, no overlap)**
+```basic
+10 TTS "Loading..."
+20 TTS "Graphics ready."
+30 TTS "Network ready."
+40 ' Spoken in order. No overlap. No implicit interruption.
+```
+
+**SAYFLUSH (drop backlog, keep current)**
+```basic
+10 TTS "One"
+20 TTS "Two"
+30 TTS "Three"
+40 SAYFLUSH
+50 ' If already speaking, it will finish the current utterance, then the rest is dropped.
+```
+
+**SAYSTOP (immediate stop + clear queue)**
+```basic
+10 TTS "This is a long sentence that might take a while."
+20 TTS "This will be queued unless we stop."
+30 SAYSTOP
+40 ' Speech stops immediately and the queue is cleared.
+```
+
+> Note: TTS runs offline. Language availability depends on installed voice packs.
