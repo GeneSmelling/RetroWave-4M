@@ -12,6 +12,28 @@ This document defines the normative keyboard shortcuts for RetroWave-4M.
 - Keys are written in U.S. keyboard naming (e.g. `Esc`, `Enter`, `Backspace`).
 - "MUST" / "SHOULD" are used in the RFC 2119 sense.
 
+## Function Keys — Utility Launcher
+
+The function keys F1–F12 launch the built-in utilities described in `UTILITIES.md`. All utilities run in **accessible text mode** unless noted otherwise.
+
+| Key | Utility | Notes |
+|---|---|---|
+| `F1` | **Help** — interactive manual | Accessible / voice-driven; works without a monitor. |
+| `F2` | **Options & Startup Preferences** | Language, colours, voice, printer, login, backup, etc. |
+| `F3` | **File Manager** | Midnight-Commander–style; includes text editor, image viewer, sprite viewer, video/audio player. |
+| `F4` | **Music Utility (DAW)** | Tracker-style composer; export to WAV or BASIC commands. |
+| `F5` | **Network** | USB tethering and mesh network configuration. |
+| `F6` | **Crypto Wallet** | Wallet management and optional Litecoin mining. |
+| `F7` | *(reserved / implementation-defined)* | |
+| `F8` | *(reserved / implementation-defined)* | |
+| `F9` | **Read cursor position** | Reads aloud (in the selected language) the cursor coordinates and the content of the current cell; in graphics mode, reads the current graphics mode. |
+| `F10` | **Read current line** | Reads aloud the content of the current line. |
+| `F11` | **Toggle fullscreen** | SHOULD toggle between windowed and fullscreen. |
+| `F12` | **Restart / Shutdown** | Prompts for restart or shutdown. Equivalent to Hard Reset (see below). |
+| `Print Screen` (`STAMP`) | **Screenshot** | Active in both text and graphics mode; automatically saves a timestamped PNG to the screenshots directory. |
+
+> **Note:** The **Sprite Editor** and **3D Editor** are separate companion applications, not function-key utilities, so as not to burden system memory.
+
 ## Global shortcuts
 
 These shortcuts MUST work regardless of the current screen (splash, BASIC editor, running program, etc.), unless stated otherwise.
@@ -20,7 +42,7 @@ These shortcuts MUST work regardless of the current screen (splash, BASIC editor
 |---|---|---|
 | Quit / Exit | `Alt+F4` (window managers), or window close button | MUST exit cleanly (release audio/video resources). |
 | Pause/Resume | `Pause` | SHOULD toggle pause if a pause system exists; otherwise MAY be unassigned. |
-| Screenshot | `F9` | SHOULD save a screenshot to a timestamped file (implementation-defined path). |
+| Screenshot | `Print Screen` | MUST save a screenshot to a timestamped PNG file in the screenshots directory (text and graphics modes). |
 | Toggle fullscreen | `F11` | SHOULD toggle between windowed and fullscreen. |
 
 ## Reset / Break shortcuts (BASIC runtime)
@@ -67,3 +89,4 @@ These mirror the `SAYSTOP` / `SAYFLUSH` commands described in the specs.
 
 - Some keyboards map `F12` or `Pause` differently; implementations SHOULD allow remapping via a config file.
 - For kiosk-like usage, implementations MAY disable OS-level shortcuts (like `Alt+F4`) and provide an in-app alternative.
+- `F9` and `F10` provide screen-reader–style accessibility on all supported keyboards.
