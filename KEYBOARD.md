@@ -28,7 +28,7 @@ The function keys F1–F12 launch the built-in utilities described in `UTILITIES
 | `F8` | *(reserved / implementation-defined)* | |
 | `F9` | **Read cursor position** | Reads aloud (in the selected language) the cursor coordinates and the content of the current cell; in graphics mode, reads the current graphics mode. |
 | `F10` | **Read current line** | Reads aloud the content of the current line. |
-| `F11` | **Toggle fullscreen** | SHOULD toggle between windowed and fullscreen. |
+| `F11` | **Toggle fullscreen** | Toggle Fullscreen (development/testing only; see note below) |
 | `F12` | **Restart / Shutdown** | Prompts for restart or shutdown. Equivalent to Hard Reset (see below). |
 | `Print Screen` (`STAMP`) | **Screenshot** | Active in both text and graphics mode; automatically saves a timestamped PNG to the screenshots directory. |
 
@@ -90,3 +90,14 @@ These mirror the `SAYSTOP` / `SAYFLUSH` commands described in the specs.
 - Some keyboards map `F12` or `Pause` differently; implementations SHOULD allow remapping via a config file.
 - For kiosk-like usage, implementations MAY disable OS-level shortcuts (like `Alt+F4`) and provide an in-app alternative.
 - `F9` and `F10` provide screen-reader–style accessibility on all supported keyboards.
+
+- ### F11 — Toggle Fullscreen
+
+- **Development/testing (desktop environment):**
+  Pressing `F11` toggles between windowed and fullscreen mode. Use this shortcut only when running RetroWave-4M in a desktop OS during development or testing.
+
+- **Standalone system (final release for Raspberry Pi):**
+  When RetroWave-4M runs as a stand-alone system on Raspberry Pi 4, Pi 400, or newer, the environment is always fullscreen. In this case, the `F11` key has no function and is unassigned.
+
+> **Note:**  
+> F11 is reserved for desktop development only. End users on the stand-alone, appliance build should ignore this shortcut.
