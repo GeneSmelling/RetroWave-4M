@@ -157,7 +157,7 @@ execution, and no binary blob loader.
 ### Is crypto mining supported?
 
 Optional Litecoin mining is available via the F6 Crypto Wallet utility. It is **disabled by
-default** and requires explicit user consent. A CPU share cap (default 25 %) limits resource
+default** and requires explicit user consent. A CPU share cap (default 25%) limits resource
 use. Mining auto-pauses when running on battery. The ecology impact is prominently disclosed.
 
 ### Why is the ecology impact disclosed?

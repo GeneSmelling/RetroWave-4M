@@ -104,7 +104,7 @@ The following are explicitly out of scope and will not be pursued:
 | Sandbox edge cases (path traversal, symlinks) | Strict path normalisation; symlinks resolved and checked; no access outside the user data directory; automated regression tests |
 | Network parsing surface | Conservative, whitelist-based parsers; no JavaScript; no auto-redirect; sandboxed network process |
 | Crypto key safety | Keys stored in an encrypted local store; no key export over network; mining disabled by default; explicit user consent required to enable |
-| Mining vs ecology | CPU share cap (configurable, default 25 %); real-time energy-use indicator in F6 wallet utility; mining auto-pauses on battery |
+| Mining vs ecology | CPU share cap (configurable, default 25%); real-time energy-use indicator in F6 wallet utility; mining auto-pauses on battery |
 | Growing scope creep | Maintain this non-goals list; require explicit community RFC for any addition that touches the BASIC runtime or security model |
 
 ---

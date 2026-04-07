@@ -125,7 +125,7 @@ Management of cryptocurrency wallets and security. Text/accessible mode.
 - Security level configuration.
 - **Litecoin mining** (optional):
   - Disabled by default; requires explicit user consent.
-  - CPU share cap: configurable, default 25 %.
+  - CPU share cap: configurable, default 25%.
   - Real-time energy-use indicator.
   - Mining auto-pauses on battery power.
   - Ecology impact prominently disclosed to the user.

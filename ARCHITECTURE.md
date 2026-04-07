@@ -111,7 +111,7 @@ See [ACCESSIBILITY.md](./ACCESSIBILITY.md).
 - Managed via `F6` Crypto Wallet utility.
 - Wallet keys stored in an encrypted local store; no key export over network.
 - **Mining:** optional Litecoin CPU mining; disabled by default; requires explicit user consent.
-  - CPU share cap: configurable, default 25 %.
+  - CPU share cap: configurable, default 25%.
   - Real-time energy-use indicator shown in F6.
   - Mining auto-pauses on battery power.
   - Ecology impact disclosed prominently to the user.
@@ -153,7 +153,7 @@ See [ACCESSIBILITY.md](./ACCESSIBILITY.md).
 | Sandbox path traversal | Low | High | Strict path normalisation; symlink resolution + check; automated regression tests |
 | Network parser exploitation | Medium | Medium | Conservative, whitelist-based parsers; no JavaScript; no auto-redirect |
 | Crypto key theft | Low | High | Local encrypted store; no network export; user consent required |
-| Mining CPU/battery abuse | Medium | Medium | CPU cap (default 25 %); auto-pause on battery; energy indicator |
+| Mining CPU/battery abuse | Medium | Medium | CPU cap (default 25%); auto-pause on battery; energy indicator |
 | BASIC static analysis bypass | Low | Medium | Warn-and-cancel model; no silent execution; user always informed |
 
 ---
