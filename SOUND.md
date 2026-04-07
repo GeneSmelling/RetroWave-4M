@@ -1,196 +1,276 @@
-# Sound System Specification
+# Sound System Specification -- RetroWave 4M
+
+---
 
 ## Overview
-This document outlines the comprehensive sound system specification for the RetroWave-4M project. It includes details on text-to-speech, sampled sound, synthesizers, soundfont instruments, audio tracks, mixers, and 3D sound capabilities.
+
+The RetroWave 4M sound system covers four areas:
+
+1. **Text-to-Speech (TTS)** -- offline voice synthesis for accessibility and BASIC programs.
+2. **Sampled audio** -- playback and recording of audio files.
+3. **Synthesis engine** -- real-time instrument synthesis with presets.
+4. **SoundFont instruments** -- SF2-based instrument library.
+
+A tracker-style **F4 Music Utility** provides accessible, mouse-free composition. A separate
+**Graphical DAW** companion app provides a fuller, LMMS-like experience.
+
+Audio is the only subsystem permitted to run in the background while BASIC executes.
+
+---
 
 ## 1. Text-to-Speech (TTS)
-- **Engine**: Utilizes advanced TTS engine for realistic voice synthesis.
-- **Languages Supported**: English, Spanish, French, and more.
-- **Custom Voices**: Ability to create and integrate custom voices.
 
-### Offline implementation notes (normative)
+### Engine
 
-Target: Raspberry Pi 400 (offline-first home computer).
+- **Piper (primary):** offline, high-quality neural voices. Preferred when a matching Piper voice
+  model is installed.
+- **eSpeak NG (fallback):** used when Piper is not available for the requested language; broad
+  language coverage.
+- **No cloud connection required.** All TTS runs fully offline.
 
-#### Engines
-- **Piper (primary):** preferred when a matching Piper voice/model is installed (higher-quality voices).
-- **eSpeak NG (fallback):** used when Piper is not available for the requested language (broad coverage).
+### Voice loading and memory
 
-#### Utterance queue semantics
-- Each `TTS` call MUST create one *utterance* and enqueue it in a **FIFO queue**.
-- The system MUST synthesize/play **only one utterance at a time** (**no overlap**).
-- New utterances MUST NOT implicitly interrupt the currently playing utterance (**no implicit suppression**).
+- Piper voices are loaded **lazily** (not at boot).
+- Cached voices use an **LRU policy** with a configurable memory budget (`TTS_CACHE_MB`).
+- Under memory pressure, least-recently-used voices are unloaded.
 
-#### Control commands
-- `SAYSTOP` MUST stop playback immediately and clear the pending utterance queue.
-- `SAYFLUSH` MUST NOT interrupt the currently playing utterance; it clears the pending queue so that no further speech occurs after the current utterance completes.
-- `SAYSTATUS()` returns: `0` idle, `1` speaking, `2` paused (only if pause/resume exists).
-- `SAYQUEUE()` returns the number of queued utterances **excluding** the one currently playing.
+### Queue semantics (normative)
 
-#### Lazy loading and memory (recommended)
-- Piper voices SHOULD be loaded lazily (not at boot).
-- Cached Piper voices SHOULD use an LRU policy with a configurable memory budget (e.g. `TTS_CACHE_MB`).
-- Under memory pressure (budget exceeded), least-recently-used voices SHOULD be unloaded.
+TTS output is **queued**.
 
-## 2. Sampled Sound
-- **Library**: Includes a wide range of pre-recorded sounds.
-- **Formats Supported**: WAV, MP3, OGG.
-- **Functionality**: Supports playback, looping, and layering of sounds.
+- Every call to `TTS` creates one *utterance* and pushes it to a FIFO queue.
+- The system plays **only one utterance at a time** (no overlap).
+- If `TTS` is called while speech is playing, the new utterance is **queued** and does NOT
+  implicitly interrupt the current utterance.
 
-## 3. Synthesizers
-- **Types**: Virtual Analog, FM, Granular.
-- **Specifications**: Adjustable parameters for oscillators, filters, and envelopes.
-- **Presets**: Ships with a variety of presets for easy use.
+Use `SAYSTOP` / `SAYFLUSH` to explicitly control playback and the queue.
+
+### BASIC TTS commands
+
+#### `TTS text$ [, lang$ [, mode$]]`
+
+Speaks the given text.
+
+- `text$` -- the text to speak (UTF-8).
+- `lang$` (optional) -- BCP-47 language tag or short code (e.g. `"it-IT"`, `"en-US"`, `"en"`).
+  If omitted, the current default Piper voice is used.
+- `mode$` (optional) -- `"TEXT"` (default, natural reading) or `"CODE"` (for BASIC listings).
+
+#### `SAYSTOP`
+
+Stops current utterance immediately and clears the entire queue.
+
+#### `SAYFLUSH`
+
+Does NOT interrupt the current utterance; clears all pending queued utterances so nothing is
+spoken after the current one finishes.
+
+#### `SAYSTATUS()` -> status
+
+Returns: `0` = idle, `1` = speaking, `2` = paused.
+
+#### `SAYQUEUE()` -> n
+
+Returns the number of queued utterances **excluding** the one currently playing.
+
+### Examples
+
+```basic
+10 TTS "Loading..."
+20 TTS "Graphics ready."
+30 TTS "Network ready."
+40 ' Spoken in order. No overlap. No implicit interruption.
+```
+
+```basic
+10 TTS "One"
+20 TTS "Two"
+30 TTS "Three"
+40 SAYFLUSH
+50 ' Finishes "One", then stops (Two and Three are flushed).
+```
+
+```basic
+10 TTS "This is a long sentence."
+20 SAYSTOP
+30 ' Speech stops immediately; queue is cleared.
+```
+
+---
+
+## 2. Sampled Audio
+
+- **Formats:** WAV, MP3, OGG (playback); WAV (record).
+- **Playback:** single channel; looping supported.
+- **Recording:** live audio input to WAV file.
+- Max file size: 200 MB (system-wide sandbox limit).
+
+---
+
+## 3. Synthesisers
+
+### Engine types
+
+| Type | Description |
+|------|-------------|
+| Virtual Analog | Classic oscillators (sawtooth, square, sine, triangle, noise); ADSR envelope; low-pass / high-pass / band-pass filters |
+| FM | Frequency modulation synthesis; operator stacks; classic DX7-style patches |
+| Granular | Grain-based time-stretching and pitch-shifting |
+
+### Common parameters
+
+- **Oscillators:** waveform, frequency, detune.
+- **ADSR envelope:** Attack, Decay, Sustain, Release times and levels.
+- **Filters:** cutoff frequency, resonance, filter type.
+- **Effects:** reverb, delay, chorus, equalisation.
+- **Portamento:** glide between notes; configurable time.
 
 ### Synthwave Preset Bank
-Inspired by the sonic palette of 1980s synthesizers (Roland Juno, Oberheim, DX7-style FM pads, etc.), the Synthwave preset bank includes:
-- **Lead Synth** – Bright, cutting leads for melodic lines.
-- **Pad** – Lush, sustained pads for atmosphere.
-- **Arpeggio Bass** – Sequenced bass patterns in classic synthwave style.
-- **Pluck** – Short, percussive plucked tones.
-- **Choir/Vox** – Vocal and choir-style synthesis.
-- **Drums/808** – Drum machine and 808-style percussive sounds.
-- **Atmospheres** – Ambient soundscapes and textural effects.
 
-Presets are named and browsable. Users may save modified presets as custom entries.
-
-## 3A. Synth Preset Library (Bundled)
-
-Preset identifiers are stable, machine-readable strings used by code and UI components. UI display names may be localized for different languages, but identifiers always remain constant. Presets are grouped by category to make browsing easier for users and developers.
-
-### Preset Identifier Groups
+Inspired by 1980s synthesisers (Roland Juno, Oberheim, DX7-style FM pads). Presets are named
+with stable machine-readable identifiers; UI display names may be localised.
 
 #### LEAD_SYNTH
-- `NEON_VIPER_LEAD`
-- `LASER_FIFTH_LEAD`
-- `CHROME_PULSE_LEAD`
-- `ARCADE_SOLO_LEAD`
-- `NIGHT_RIDER_PORTA`
+`NEON_VIPER_LEAD`, `LASER_FIFTH_LEAD`, `CHROME_PULSE_LEAD`, `ARCADE_SOLO_LEAD`,
+`NIGHT_RIDER_PORTA`
 
 #### PAD
-- `VHS_GLOW_PAD`
-- `MIDNIGHT_HORIZON_PAD`
-- `LUSH_ANALOG_PAD`
-- `GLASS_DAWN_PAD`
-- `SLOW_DRIFT_PAD`
+`VHS_GLOW_PAD`, `MIDNIGHT_HORIZON_PAD`, `LUSH_ANALOG_PAD`, `GLASS_DAWN_PAD`,
+`SLOW_DRIFT_PAD`
 
 #### ARPEGGIO_BASS
-- `GRID_RUNNER_ARP_BASS`
-- `STEP_SEQ_MONO_BASS`
-- `METRO_PULSE_ARP`
-- `NEON_CHASE_BASS`
-- `CLOCKWORK_ARP_BASS`
+`GRID_RUNNER_ARP_BASS`, `STEP_SEQ_MONO_BASS`, `METRO_PULSE_ARP`, `NEON_CHASE_BASS`,
+`CLOCKWORK_ARP_BASS`
 
 #### PLUCK
-- `PIXEL_PLUCK`
-- `CRYSTAL_PICK_PLUCK`
-- `SHORT_GATE_PLUCK`
-- `FM_KEY_PLUCK`
-- `BUBBLY_PLUCK`
+`PIXEL_PLUCK`, `CRYSTAL_PICK_PLUCK`, `SHORT_GATE_PLUCK`, `FM_KEY_PLUCK`, `BUBBLY_PLUCK`
 
 #### CHOIR_VOX
-- `VOX_AAH_STACK`
-- `FORMANT_CHOIR_PAD`
-- `VAPOR_VOX`
-- `TALKBOX_LEAD`
-- `NEON_CHOIR_HIT`
+`VOX_AAH_STACK`, `FORMANT_CHOIR_PAD`, `VAPOR_VOX`, `TALKBOX_LEAD`, `NEON_CHOIR_HIT`
 
 #### DRUMS_808
-- `EIGHT_O_EIGHT_PUNCH_KIT`
-- `LINN_NIGHT_KIT`
-- `ELECTRO_TOMS`
-- `GATED_SNARE_80S`
-- `TAPE_HATS`
+`EIGHT_O_EIGHT_PUNCH_KIT`, `LINN_NIGHT_KIT`, `ELECTRO_TOMS`, `GATED_SNARE_80S`, `TAPE_HATS`
 
 #### ATMOSPHERES
-- `CITY_RAIN_ATMOS`
-- `SPACE_DUST_DRONE`
-- `DARK_ALLEY_AIR`
-- `DISTANT_SIGNAL_BED`
-- `SUNRISE_NOISE_WASH`
+`CITY_RAIN_ATMOS`, `SPACE_DUST_DRONE`, `DARK_ALLEY_AIR`, `DISTANT_SIGNAL_BED`,
+`SUNRISE_NOISE_WASH`
 
-### Cross-Genre Synth Features
+#### SUPERSAW (cross-genre)
+`SUPERSAW_ANTHEM`, `SUPERSAW_CHORD_STACK`, `SUPERSAW_WIDE_LEAD`, `SUPERSAW_SLOW_BLOOM`,
+`SUPERSAW_DETUNE_RUSH`
 
-The following identifiers represent **synthesis features/styles** rather than genre-specific preset banks. They may be applied across any bank or genre and are not limited to synthwave contexts.
+#### OVERDRIVE (cross-genre)
+`OVERDRIVE_BASS_GROWL`, `OVERDRIVE_LEAD_SCREAM`, `OVERDRIVE_PULSE_STAB`,
+`OVERDRIVE_ARP_GRIND`, `OVERDRIVE_PAD_RASP`
 
-#### SUPERSAW (supersaw oscillator stack / detune chorus style)
-Multiple detuned sawtooth oscillators layered to produce a wide, rich sound common in trance, eurobeat, synthwave, and pop production:
-- `SUPERSAW_ANTHEM`
-- `SUPERSAW_CHORD_STACK`
-- `SUPERSAW_WIDE_LEAD`
-- `SUPERSAW_SLOW_BLOOM`
-- `SUPERSAW_DETUNE_RUSH`
+---
 
-#### OVERDRIVE (drive/distortion stage)
-A clipping or waveshaping stage applied to the signal path, adding harmonic saturation and grit. Usable across bass, lead, pad, and arp sounds in any genre:
-- `OVERDRIVE_BASS_GROWL`
-- `OVERDRIVE_LEAD_SCREAM`
-- `OVERDRIVE_PULSE_STAB`
-- `OVERDRIVE_ARP_GRIND`
-- `OVERDRIVE_PAD_RASP`
+## 4. SoundFont Instruments (SF2)
 
-## 4. Soundfont Instruments
-- **Compatibility**: Supports SF2 soundfonts.
-- **Integration**: Allows users to load and create custom instruments.
-- **Features**: Includes basic editing tools for modifying soundfonts.
-- **Delivery model**: One SF2 file per instrument, registered in `soundfonts/index.json` (aligned with §8 Lazy Loading). Custom user soundfonts can be dropped into the `soundfonts/user/` directory and are auto-discovered at startup.
+- **Format:** SF2 (SoundFont 2).
+- **Delivery model:** one SF2 file per instrument; registered in `soundfonts/index.json`.
+- **User soundfonts:** drop into `soundfonts/user/`; auto-discovered at startup.
+- **Lazy loading:** soundfonts are loaded on first use (see section 8 below).
 
-### Bundled Instrument Library
+### Bundled Ethnic / Acoustic Instruments
 
-#### Ethnic / Acoustic Instruments
-A curated selection of ~12 widely recognised acoustic and ethnic instruments, covering a broad range of world music traditions:
+| Instrument | Origin / Tradition |
+|-----------|-------------------|
+| Kora | West Africa (21-string bridge harp-lute) |
+| Sitar | North India (long-neck plucked lute) |
+| Tabla | North India (paired hand drums) |
+| Oud | Middle East / North Africa (fretless lute) |
+| Erhu | China (two-string bowed spike fiddle) |
+| Koto | Japan (13-string zither) |
+| Shakuhachi | Japan (end-blown bamboo flute) |
+| Charango | Andes -- Bolivia/Peru (small 10-string lute) |
+| Tin Whistle | Celtic / Ireland (six-hole flageolet) |
+| Balafon | West Africa (wooden keyed percussion) |
+| Duduk | Armenia / Caucasus (double-reed woodwind) |
+| Didgeridoo | Australia -- Aboriginal (circular-breathing aerophone) |
 
-| Instrument | Origin / Tradition | Notes |
-|---|---|---|
-| Kora | West Africa | 21-string bridge harp-lute |
-| Sitar | North India | Long-neck plucked lute; includes sympathetic strings |
-| Tabla | North India | Paired hand drums; multiple stroke articulations |
-| Oud | Middle East / North Africa | Fretless short-neck lute |
-| Erhu | China | Two-string bowed spike fiddle |
-| Koto | Japan | 13-string zither |
-| Shakuhachi | Japan | End-blown bamboo flute |
-| Charango | Andes (Bolivia/Peru) | Small 10-string lute; bright, metallic tone |
-| Tin Whistle | Celtic / Ireland | Six-hole flageolet; bright, piercing tone |
-| Balafon | West Africa | Wooden keyed percussion with gourd resonators |
-| Duduk | Armenia / Caucasus | Double-reed woodwind; rich, mournful timbre |
-| Didgeridoo | Australia (Aboriginal) | Circular-breathing aerophone; deep drones |
-
-#### Synth-Based Instruments
-A set of synthesis-driven timbres delivered as SF2 soundfonts. These are inherently harder to source as authentic recordings and are instead modelled or synthesized:
+### Bundled Synth-Based Instruments
 
 | Instrument | Description |
-|---|---|
-| Synthpad | Slow-attack, sustain-heavy pad; lush chordal background texture |
-| Supersaw | Detuned stack of sawtooth oscillators; classic trance/eurobeat lead |
-| Hoover | Aggressive, rising-pitch synth stab inspired by Rave Hoover |
-| Pulse Bass | Square/pulse-wave bass with filter sweep; punchy electronic bass |
-| Glass Bell | FM-derived glassy bell tone; crystalline, high-register sound |
+|-----------|-------------|
+| Synthpad | Slow-attack pad; lush chordal background texture |
+| Supersaw | Detuned sawtooth stack; classic trance/eurobeat lead |
+| Hoover | Aggressive rising-pitch synth stab |
+| Pulse Bass | Square/pulse-wave bass with filter sweep |
+| Glass Bell | FM-derived glassy bell tone |
 | Choir Aah (Synth) | Vocoder/formant-based synthetic choir |
-| Analog Strings | Detuned string ensemble emulation reminiscent of Roland Strings |
+| Analog Strings | Detuned string ensemble emulation |
 
-> **Note:** Synth-based SF2 soundfonts are modelled rather than sampled; tonal accuracy depends on the SF2 engine's synthesis capabilities.
+> Synth-based SF2 soundfonts are modelled rather than sampled; tonal accuracy depends on the
+> SF2 engine's synthesis capabilities.
 
-## 5. Audio Tracks
-- **Track Count**: Supports unlimited audio tracks.
-- **Control**: Provides tools for adjusting volume, panning, and effects for each track.
-- **Recording**: Capable of recording live audio in real-time.
+---
 
-## 6. Mixer
-- **Channels**: Multi-channel mixing capabilities.
-- **Effects**: Built-in effects such as reverb, delay, and equalization.
-- **Visuals**: Real-time visual feedback of audio levels and effects.
+## 5. Audio Tracks and Mixer
 
-## 7. 3D Sound Capabilities
-- **Surround Sound**: Supports 5.1 and 7.1 surround formats.
-- **Positional Audio**: Enables 3D spatial audio integration for immersive experiences.
-- **Compatibility**: Works with VR and AR systems for enhanced interaction.
+- **Track count:** unlimited audio tracks.
+- **Mixer:** per-track volume, panning, and effects; master volume control.
+- **BPM:** configurable beats per minute; default tuning A = 440 Hz.
+- **Effects bus:** reverb, delay, equalisation (shared and per-track).
+- **Visual feedback:** real-time level meters.
 
-## Conclusion
-This sound system will provide robust capabilities to enhance the auditory experience in the RetroWave-4M project. Each section can be expanded with further technical details as development progresses.
+### BASIC sound commands
+
+```basic
+SOUND        ' initiate sound
+NOTE  pitch, duration
+REST  duration
+BPM   value
+TUNING value
+TRACK PLAY id
+```
+
+---
+
+## 6. F4 Music Utility (Tracker)
+
+The F4 utility is a text-based, accessible tracker. It runs in text/accessible mode and requires
+no mouse.
+
+### Sections
+
+**Instrument panel:** select a soundfont from the library, or build a synth sound from oscillators
+with ADSR/filter/FX. Multiple instruments can be defined per track.
+
+**Tracker grid:** tabular layout (classic tracker style). Each channel column lists:
+- Note, selected instrument, duration, optional rest.
+- Channel volume (mixer) and global BPM.
+
+Additional features: chords, portamento, fade in/out, microtones (optional).
+External WAV/MP3 files can be included alongside synthesised tracks.
+
+**Export options:**
+- BASIC `TRACK` commands (for embedding in a BASIC listing and playing with `TRACK PLAY id`).
+- WAV audio file.
+
+---
+
+## 7. Graphical DAW (Companion App)
+
+A separate companion application (not a resident utility) providing a more visual DAW experience,
+inspired by LMMS but much lighter in scope:
+
+- Timeline-based arrangement view.
+- Instrument and effects rack.
+- Piano roll for note entry.
+- Accessibility-minded: keyboard-navigable, TTS-compatible labels.
+- Export: WAV and MP3.
+
+---
 
 ## 8. Lazy Loading Strategy
-- Audio assets (samples, soundfonts, presets) are loaded on demand when first played, not at startup.
-- A short prebuffer period is allowed before playback begins to avoid audible glitches.
+
+- Audio assets (samples, soundfonts, presets) are loaded on demand when first played, not at
+  startup.
+- A short pre-buffer period is allowed before playback begins to avoid audible glitches.
 - Loaded assets are cached; cache can be flushed manually or automatically under memory pressure.
-- Frequently-used assets (UI sounds, common SFX) can be marked for eager loading at startup via a manifest file.
-- Synthwave presets are loaded lazily per-preset; only the preset metadata index is loaded at startup.
+- Frequently-used assets (UI sounds, common SFX) can be marked for eager loading at startup via
+  a manifest file.
+- Synthwave presets are loaded lazily per-preset; only the preset metadata index loads at startup.
+- Piper voice models are loaded lazily with an LRU policy and a configurable memory budget
+  (`TTS_CACHE_MB`).

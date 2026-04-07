@@ -1,62 +1,132 @@
-# Accessibility in RetroWave-4M
+# Accessibility -- RetroWave 4M
 
-RetroWave-4M is designed with an “accessibility by default” philosophy: all core features are usable even when no monitor is attached. The goal is to provide an inclusive experience for everyone, with special care given to blind, visually impaired, and motor-impaired users.
-
----
-
-## General Principles
-
-- **Works without a monitor:** All main utilities and the system itself can be used even if no display is connected.
-- **Automatic audio support:** If a monitor is not detected or gets unplugged during use, speech output (TTS) is automatically enabled, reading screens, lists, menus, and other important content.
-- **Keyboard accessibility:** Complete navigation and all operations are possible via keyboard only, with no mouse or touchpad required.
-- **High-contrast color schemes:** On startup, users can choose between various high-contrast modes (Classic C64, Night Mode, Green Phosphor, High Contrast, or Custom).
-- **Affordable and sustainable:** RetroWave-4M is designed to be low-cost and energy-efficient, accessible for everyone.
+RetroWave 4M is built on an **accessibility-by-default** philosophy: every core feature must be
+usable even when no monitor is attached. Accessibility is not an add-on; it is part of the
+fundamental design.
 
 ---
 
-## Accessible Features & Utilities
+## Core Principles
 
-- **Help (F1): Accessible Manual**  
-  - Works in text mode and even without a monitor.
-  - Is read aloud (TTS) in the preferred language.
-  - Covers keyboard mapping, BASIC commands, utility index, FAQs, BASIC tutorials—everything can be navigated by keyboard and spoken aloud.
-  - Enables full self-learning, even without a screen.
-
-- **Utilities & Interface**  
-  - All primary utilities (F1 to F12) are designed for full use with TTS and keyboard.
-  - No essential utility relies on complex graphics or requires windowing/multitasking.
-
-- **Screen reader functions**  
-  - `F9`: Reads out the current cursor position and the cell’s content (text mode) or the current graphics mode (graphics mode).
-  - `F10`: Reads aloud the entire current line.
-  - These features are always available for instant feedback.
-
-- **Text-based web browsing**  
-  - The built-in browser is text-only (Lynx-inspired), ensuring maximum compatibility with screen readers and safe navigation.
-  - Even without a monitor, web navigation is possible using speech output.
-  - No graphical/multitasking browser is provided.
-
-- **Accessibility preferences**  
-  - Via the Options menu (`F2`), users can set language, speech settings, color theme, and further accessibility parameters.
+1. **Works without a monitor.** All utilities and the BASIC environment are fully usable in
+   headless (monitor-free) mode.
+2. **Automatic voice mode.** If no monitor is detected at boot, or if the monitor is disconnected
+   while the system is running, TTS (Text-to-Speech) is automatically enabled.
+3. **Keyboard-only navigation.** Every function can be reached and operated using only the
+   keyboard. No mouse or touchpad is ever required.
+4. **High-contrast colour schemes.** At startup (or via F2 Options), users choose from: Classic
+   C64, Classic C16, Green Phosphor, Night Mode, High Contrast, or Custom.
+5. **Affordable and energy-efficient.** Raspberry Pi 4/400 hardware keeps costs and power
+   consumption low.
 
 ---
 
-## Cross-References — Where to Find Accessibility Topics
+## VOICE ON Behaviour
 
-- `VISION.md`: *Accessibility Goals* section (overview and principles)
-- `UTILITIES.md`: See Help, Browser, Options, F9/F10, and speech output features in each utility.
-- `KEYBOARD.md`: Table of F9/F10 shortcuts (“screen reader style”), keyboard navigation notes.
-- `BASIC_LANGUAGE.md`: Sections listing TTS and accessibility commands.
-- Every main utility description highlights “no mouse, no windows” for compatibility and focus.
+- **`VOICE ON`** -- enables system-wide speech feedback.
+- **`VOICE OFF`** -- disables speech feedback.
+- Also configurable via `F2` Options (language, voice gender: male/female, enable/disable).
+
+### What is spoken
+
+| Context | Spoken content |
+|---------|---------------|
+| `PRINT` output | User string in the selected language |
+| `INPUT` prompt | Prompt text in the selected language |
+| `LIST` output | BASIC keywords in English; string literals in the selected language |
+| Menus | All menu items and selections |
+| Utilities (F1--F12) | All text, prompts, and selectable items |
+| Keypress feedback | Key name or character (when enabled in Options) |
+| Error messages | Error text in the selected language |
+
+### Auto-voice (headless mode)
+
+When the system boots without a monitor, or when a monitor is disconnected:
+
+1. TTS is automatically activated (equivalent to `VOICE ON`).
+2. The selected language from F2 Options is used.
+3. The system reads the boot screen, the READY prompt, and all subsequent output.
+4. The user can fully navigate menus, run BASIC programs, and use all utilities by ear.
 
 ---
 
-## Additional Notes
+## Accessibility Shortcuts
 
-- **Web radio** and streaming features work even without a display, with audio-only operation.
-- Monotasking and absence of windows/complex widgets reduce cognitive load and make the interface ideal for blind and low-vision users.
-- Any future integrated utility must follow these same accessibility guidelines.
+| Key | Function |
+|-----|---------|
+| `F9` | Reads aloud the current cursor coordinates and the content of the current cell (text mode), or the current graphics mode (graphics mode) |
+| `F10` | Reads aloud the entire content of the current line |
+| `Ctrl+.` | `SAYSTOP` -- stop speech immediately and clear the TTS queue |
+| `Ctrl+Shift+.` | `SAYFLUSH` -- clear the pending TTS queue without interrupting the current utterance |
 
 ---
 
-> **Note:** For suggestions, feedback, or requests regarding accessibility, a dedicated support channel is available (see “Support” section in the documentation).
+## Accessible Utilities (F1--F12)
+
+All function-key utilities run in text/accessible mode. None require a mouse or complex graphics.
+
+### F1 -- Help (Instruction Manual)
+
+- Fully voice-driven; works without a monitor.
+- When no monitor is connected, Help reads out screen content and all selectable items.
+- Enables complete self-learning of BASIC and the system entirely by ear.
+- Contents: keyboard map, function-key descriptions, BASIC command reference, beginner and
+  advanced BASIC courses, FAQ, release notes, online support.
+
+### F2 -- Options and Preferences
+
+- Set language, speech voice, gender, and enable/disable voice at startup.
+- Choose colour scheme (for when a monitor is available).
+- Configure backup, printer, login settings.
+
+### F3 -- File Manager
+
+- Midnight-Commander style; full keyboard navigation.
+- All file operations (copy, move, delete to Trashcan) accessible by keyboard + TTS.
+
+### F9 / F10 -- Screen Reader Shortcuts
+
+- Instant TTS feedback at any time, in any mode.
+- Designed to work like screen-reader commands on standard accessibility tools.
+
+---
+
+## Text-Based Web Browsing
+
+- The text browser companion app (Lynx-like) renders web pages as plain text.
+- No graphical browser is provided (no Chrome-like browser).
+- TTS reads page content aloud; all navigation is keyboard-based.
+- Safe even without a monitor: web content is accessible entirely by audio.
+
+---
+
+## Additional Accessibility Notes
+
+- **Web radio and streaming** work without a display (audio-only operation).
+- **Monotasking** reduces cognitive load: there is always exactly one active context, no
+  overlapping windows, no hidden background apps.
+- **Minimal widget set** (buttons, labels, text inputs, checkboxes, sliders, dropdowns,
+  scrollable panels) ensures all UI elements have clear keyboard focus and TTS labels.
+- Any future utility or companion app must follow the same accessibility guidelines: full
+  keyboard navigation, TTS-compatible labels, no mouse-only interactions.
+
+---
+
+## WCAG and Standards Alignment
+
+- Colour contrast targets are aligned with WCAG 2.1 AA (minimum 4.5:1 for text).
+- High-contrast mode achieves AAA contrast ratios.
+- All images and sprites exposed to the user interface carry alternative text descriptions
+  accessible via TTS.
+- Keyboard focus order follows a logical, predictable sequence.
+
+---
+
+## Cross-References
+
+- [BASIC_LANGUAGE.md](./BASIC_LANGUAGE.md) -- `TTS`, `SAYSTOP`, `SAYFLUSH`, `SAYSTATUS`,
+  `SAYQUEUE` commands; `VOICE ON/OFF`.
+- [SOUND.md](./SOUND.md) -- TTS engine details, queue semantics, Piper and eSpeak NG.
+- [KEYBOARD.md](./KEYBOARD.md) -- F9/F10 shortcuts; `Ctrl+.` / `Ctrl+Shift+.`; all key bindings.
+- [UTILITIES.md](./UTILITIES.md) -- accessible behaviour of each F-key utility.
+- [VISION.md](./VISION.md) -- accessibility goals; Neoism; non-goals.
