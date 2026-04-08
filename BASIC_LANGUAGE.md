@@ -1,4 +1,16 @@
-# BASIC Language Specification
+# BASIC Language Reference -- RetroWave 4M
+
+RetroWave 4M BASIC is a line-numbered, non-object-oriented dialect extended with structured
+programming constructs, Unicode support, first-class data structures, SQLite integration,
+graphics, and sound commands. The runtime is strictly monotasking: one program runs at a time
+(background audio and network I/O are the only permitted parallel activities).
+
+> For data structures see [DATA_STRUCTURES.md](./DATA_STRUCTURES.md).
+> For graphics commands see [GRAPHICS.md](./GRAPHICS.md).
+> For sound and TTS see [SOUND.md](./SOUND.md).
+> For accessibility commands (`VOICE ON`, `SAYSTOP`, etc.) see [ACCESSIBILITY.md](./ACCESSIBILITY.md).
+
+---
 
 ## Data Types
 - **Integer `%`**: Represents whole numbers.
@@ -438,3 +450,13 @@ FOR i = 1 TO 10
     PRINT "Name: " + people(i).Name + ", Age: " + people(i).Age
 NEXT i
 ```
+---
+
+## Cross-References
+
+- [DATA_STRUCTURES.md](./DATA_STRUCTURES.md) -- data types, arrays, records, first-class data
+  structures (List, Tree, Graph, Stack, Queue, Set, Map, Priority Queue, Deque), SQLite.
+- [GRAPHICS.md](./GRAPHICS.md) -- full graphics specification (display modes, 3D, 2D, sprites).
+- [SOUND.md](./SOUND.md) -- TTS engine, queue semantics, synthesis, SoundFont instruments.
+- [ACCESSIBILITY.md](./ACCESSIBILITY.md) -- VOICE ON/OFF, headless mode, F9/F10 shortcuts.
+- [ARCHITECTURE.md](./ARCHITECTURE.md) -- security model, storage sandbox, monotasking design.

@@ -1,147 +1,193 @@
-# Utilities
+# Utilities -- RetroWave 4M
 
-Utilities are programs invoked via function keys. They are designed to be feature-rich, as they are a central part of the RetroWave-4M experience — a world to discover.
+Utilities are programs launched via function keys. They form the core interactive shell of
+RetroWave 4M: the function keys F1--F12 are the application launcher and navigation layer.
 
-Utilities run in **text/accessible mode** unless otherwise noted, and are designed to work without a monitor (screen reader / TTS mode).
+All utilities run in **text/accessible mode** unless otherwise noted. All are designed to work
+fully without a monitor (screen-reader / TTS mode), with keyboard-only navigation.
 
-> **Note on bundled applications:** Graphics-intensive tools such as the Sprite Editor and the 3D Editor are provided as **separate bundled applications** (not function-key utilities). Loading them as resident utilities would be too costly in terms of memory.
+> **Companion apps vs utilities:** Graphics-intensive tools (Sprite Editor, 3D Editor, Paint
+> Editor, DAW) are provided as **separate companion applications** launched from BASIC or the
+> file manager. Loading them as resident utilities would be too costly in memory. See
+> [COMPANION_APPS.md](./COMPANION_APPS.md).
 
 ---
 
-## Screenshot — `Print Screen` key
+## Print Screen (STAMP) -- Screenshot
 
-Active in both text mode and graphics mode. Captures the current screen and automatically saves it as a PNG file in a dedicated directory.
+Active in both text mode and graphics mode. Captures the current screen and saves it as a
+timestamped PNG file in the `screenshots/` directory. No menu required; triggers instantly.
 
 ---
 
-## F1 — Help (Instruction Manual)
+## F1 -- Help (Instruction Manual)
 
-An accessible, multilingual instruction manual. Works in **text mode only**.
+An accessible, multilingual instruction manual. Text mode only.
 
-When opened, Help loads in the language set in Preferences. The same language is used for the voice, both when voice support is enabled and when no monitor is connected. In the latter case, the voice will read out the screen content and any selectable items. This makes it possible to learn BASIC — and RetroWave-4M in general — entirely without a monitor.
+When opened, Help loads in the language configured in F2 Preferences. The same language is used
+for TTS voice output. When no monitor is connected, the voice reads screen content and all
+selectable items, making it possible to learn BASIC -- and RetroWave 4M in general -- entirely
+without a display.
 
 ### Contents
 
-- Map and description of function keys and keyboard shortcuts
-- Detailed description of all function-key utilities
-- Alphabetical list of all BASIC commands and functions (selectable)
-- Beginner BASIC course with explanations and examples
-- Advanced BASIC course with explanations and examples
-- RetroWave-4M release notes and version updates
-- Frequently Asked Questions (origin of the project, goals, etc.)
-- Online support
+- Map and description of all function keys and keyboard shortcuts.
+- Detailed description of all function-key utilities.
+- Alphabetical list of all BASIC commands and functions (selectable; read aloud by TTS).
+- Beginner BASIC course with explanations and examples.
+- Advanced BASIC course with explanations and examples.
+- RetroWave 4M release notes and version history.
+- Frequently Asked Questions (origin, goals, scope, non-goals).
+- Online support link.
 
-> The manual may also be published in print (e.g. via Amazon) for convenient offline reference.
-
----
-
-## F2 — Options and Startup Preferences
-
-General system preferences, configured in text/accessible mode:
-
-- Default language for Help, utilities, and TTS at startup
-- Voice at startup: enable/disable, language, gender (male/female) — only if a monitor is connected and the option is desired
-- Text mode colour scheme at startup: Classic C64, Classic C16, Green phosphor, Night mode, High contrast, Custom
-- Printer configuration
-- Login settings (if required)
-- Backup configuration
-- Other
+> The manual may also be published in print (e.g. via Amazon) for offline reference.
 
 ---
 
-## F3 — File Manager
+## F2 -- Options and Startup Preferences
 
-Similar to Midnight Commander. Includes a text viewer and text editor. Capabilities:
+General system preferences. Text/accessible mode.
 
-- Basic file operations: copy, move, delete (to Trash) one or more selected files
-- Create, copy, move, delete directories (to Trash)
-- Read text files
-- Create and/or edit text files
-- Display JPEG, PNG, BMP images
-- Display sprites
-- Play MP4 video (H.264)
-- Play MP3 and WAV audio
-- Load BASIC files (as an alternative to the `LOAD` command)
-- Edit BASIC files (as an alternative to the text editor mode); the editor can also be launched from within, but saves the current listing first
-- Backup system (e.g. to USB pen drive)
+- Default language for Help, utilities, and TTS at startup.
+- Voice at startup: enable/disable; language; gender (male/female). Voice is only enabled by
+  default if no monitor is connected; users with monitors can enable it explicitly.
+- Text-mode colour scheme: Classic C64, Classic C16, Green Phosphor, Night Mode, High Contrast,
+  Custom.
+- Printer configuration.
+- Login settings (if required).
+- Backup configuration (destination, schedule, integrity checks).
+- Other system preferences.
 
 ---
 
-## F4 — Music Utility
+## F3 -- File Manager
 
-A simplified text/accessible DAW, operable without a mouse. Allows composing, loading, and saving music, with export either as a WAV file or as BASIC commands (track definition) that can be integrated into a BASIC listing and played with `PLAY`, paused with `PAUSE`, and stopped with `STOP`.
+Midnight-Commander style file manager. Text/accessible mode. Full keyboard navigation.
 
-### Sections
+### Capabilities
 
-#### Instrument
-Starting from the waveform. Some instruments may be too complex to synthesise from scratch; the waveform can therefore be:
-- A soundfont from the available library
-- A complex synthesis sound, available as a preset or built by editing the waveform via oscillators
-
-Parameters: ADSR envelope, additional filters, effects (echo, reverb). Multiple instruments can be defined for the same track.
-
-#### Tracker
-Music is defined in tabular form, like a classic tracker. Each channel has its own column listing:
-- Sound, selected instrument, note, duration, and optional rests
-- Channel volume (Mixer) and BPM
-
-Chords can be selected directly in addition to individual notes (more oscillator-intensive, but lighter on filters). Optional features: portamento, fade in/out, microtones. Playback available at any time.
-
-External WAV and MP3 files can be included alongside or in place of synthesised tracks, up to covering the full length of the piece.
-
-#### Preferences
-- Master volume control
-- Tuning (default A=440 Hz; configurable)
-- Other options
-
-#### Export
-The piece can be saved at any stage. Export options:
-- As a series of BASIC commands defining tempo, pitch, instruments, music, and mixer
-- As a WAV file
+- **File operations:** copy, move, delete (to Trashcan) one or more selected files.
+- **Directory operations:** create, copy, move, delete (to Trashcan).
+- **Viewers:** text files, JPEG/PNG/BMP images, sprites.
+- **Media playback:** MP4 video (H.264), MP3 and WAV audio.
+- **Text editor:** create and edit plain text files (accessible, TTS-compatible).
+- **BASIC files:** load or edit BASIC source files (alternative to the `LOAD` command).
+- **Backup:** backup to USB pen drive or network share with integrity verification.
+- **FTP/SFTP:** upload and download files via FTP or SFTP (passive mode supported).
+- **Trashcan:** deleted files are moved to Trashcan; permanent deletion requires a second step.
 
 ---
 
-## F5 — Network
+## F4 -- Music Utility (Tracker)
 
-Configuration and management of internet connectivity, in text/accessible mode:
+A simplified text/accessible DAW. No mouse required. Compose, load, save, and export music.
 
-- USB Tethering: activation, configuration, login, password, connect/disconnect
-- Mesh network: activation and configuration (encryption enabled by default)
+### Instrument panel
+
+Select a soundfont from the bundled library, or build a synth sound from oscillators (virtual
+analog, FM, granular) with ADSR envelope, filters, and effects. Multiple instruments per track.
+
+### Tracker grid
+
+Tabular layout (classic tracker style). Each channel column lists: note, instrument, duration,
+optional rest; channel volume and global BPM.
+
+Optional features: chords, portamento, fade in/out, microtones.
+External WAV and MP3 files can be mixed alongside synthesised tracks.
+
+### Export
+
+- BASIC `TRACK` commands for embedding in a BASIC listing (played with `TRACK PLAY id`).
+- WAV audio file.
+
+### Preferences
+
+- Master volume; tuning (default A = 440 Hz); other options.
 
 ---
 
-## F6 — Crypto Wallet
+## F5 -- Network
 
-Management of cryptocurrency wallets and their security levels, with additional features specific to RetroWave-4M:
+Configuration and management of internet connectivity. Text/accessible mode.
 
-- Wallet management and security configuration
-- Litecoin mining (requires configuration and active internet connection)
-
----
-
-## F9 — Accessibility: Cursor Position and Cell Content
-
-Reads aloud (in the selected language) the current cursor coordinates and the content of the cell at that position. In graphics mode, reads the current graphics mode instead.
+- **USB Tethering:** activation, configuration (login, password), connect/disconnect.
+- **Mesh network:** activation and configuration; encryption enabled by default.
+- Network status display.
 
 ---
 
-## F10 — Accessibility: Read Line
+## F6 -- Crypto Wallet
+
+Management of cryptocurrency wallets and security. Text/accessible mode.
+
+- Wallet creation, import, and management.
+- Key storage: local encrypted store; no key export over network.
+- Security level configuration.
+- **Litecoin mining** (optional):
+  - Disabled by default; requires explicit user consent.
+  - CPU share cap: configurable, default 25%.
+  - Real-time energy-use indicator.
+  - Mining auto-pauses on battery power.
+  - Ecology impact prominently disclosed to the user.
+
+---
+
+## F7, F8 -- Reserved
+
+These function keys are reserved for future utilities or implementation-defined use.
+
+---
+
+## F9 -- Accessibility: Cursor Position and Cell Content
+
+Reads aloud (in the selected language) the current cursor coordinates and the content of the
+cell at that position. In graphics mode, reads the current graphics mode and coordinates instead.
+
+Available at any time; in any mode. Functions as a screen-reader shortcut.
+
+---
+
+## F10 -- Accessibility: Read Line
 
 Reads aloud (in the selected language) the content of the current line.
 
----
-
-## F12 — Restart / Shutdown
-
-Initiates a system restart or shutdown.
+Available at any time; in any mode. Functions as a screen-reader shortcut.
 
 ---
 
-## Bundled Applications (not function-key utilities)
+## F11 -- Toggle Fullscreen (Development / Testing Only)
 
-The following tools are provided as **separate applications** distributed alongside RetroWave-4M. They are not loaded as resident utilities in order to avoid excessive memory usage.
+In a desktop OS (development/testing), toggles between windowed and fullscreen mode.
+
+On the standalone Raspberry Pi release, the system is always fullscreen; F11 is unassigned.
+
+---
+
+## F12 -- Restart / Shutdown
+
+Prompts the user to restart or shut down the system. Equivalent to a hard reset.
+
+Pressing `F12` confirms the action after a prompt; accidental single keypresses are not acted on
+immediately.
+
+---
+
+## Bundled Companion Applications (not F-key utilities)
+
+The following tools are bundled with RetroWave 4M but are not loaded as resident utilities.
+Launch them from BASIC or from the F3 file manager.
 
 | Application | Description |
-|---|---|
-| **Sprite Editor** | Visual editor for creating and editing sprites used in BASIC programs. |
-| **3D Editor** | Editor for composing and previewing 3D scenes and objects.
+|-------------|-------------|
+| **Text Editor** | Standalone accessible plain-text editor; TTS-compatible; gap-analysis recommended. |
+| **Spreadsheet** | Spreadsheet-like tables with CSV import/export and formulas; basic charting (bar, line, pie). |
+| **Presentation** | Lightweight linear slide-by-slide presentation mode; keyboard-navigated. |
+| **Text Web Browser** | Lynx-like; no JavaScript; no media auto-play; TTS-compatible. |
+| **Email Client** | Text-based send/receive; plain text only. |
+| **Graphical DAW** | LMMS-like, lightweight; timeline, piano roll, instrument rack; exports WAV and MP3. |
+| **Sprite Editor** | Visual sprite creation and editing; map editor. |
+| **3D Editor** | 3D scene composition; OBJ import; heightfield and wormhole/tunnel tools. |
+| **Paint Editor** | Lightweight raster paint app; GIMP-like but limited scope; not full GIMP parity. |
+| **3D Game Demo** | Demonstration game showcasing the 3D and sound capabilities. |
+
+See [COMPANION_APPS.md](./COMPANION_APPS.md) for full descriptions.
